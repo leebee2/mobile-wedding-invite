@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { DayPicker } from 'react-day-picker';
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
+import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
 import Lightbox from 'yet-another-react-lightbox';
 import { ko } from 'date-fns/locale';
 import 'react-day-picker/style.css';
+import 'leaflet/dist/leaflet.css';
 import 'yet-another-react-lightbox/styles.css';
 
-const introImages = ['/photos/001.jpeg', '/photos/003.jpeg'];
-const archImage = '/photos/003.jpeg';
+const BASE_URL = import.meta.env.BASE_URL;
+const introImages = [`${BASE_URL}photos/001.jpeg`, `${BASE_URL}photos/003.jpeg`];
+const archImage = `${BASE_URL}photos/003.jpeg`;
 const galleryImages = [
-  '/photos/001.jpeg',
-  '/photos/002.jpeg',
-  '/photos/003.jpeg',
-  '/photos/004.jpeg',
-  '/photos/005.jpeg',
+  `${BASE_URL}photos/001.jpeg`,
+  `${BASE_URL}photos/002.jpeg`,
+  `${BASE_URL}photos/003.jpeg`,
+  `${BASE_URL}photos/004.jpeg`,
+  `${BASE_URL}photos/005.jpeg`,
 ];
 const titleText = 'Our Wedding Day';
 const weddingDate = new Date(2026, 5, 20);
 const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
 const venuePosition = { lat: 37.56826, lng: 126.89719 };
-const kakaoAppKey = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
 
 function getCountdownParts() {
   const now = new Date();
@@ -69,10 +70,6 @@ function App() {
   const [countdown, setCountdown] = useState(getCountdownParts);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-
-  const [kakaoLoading, kakaoError] = useKakaoLoader({
-    appkey: kakaoAppKey || ' ',
-  });
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -265,22 +262,18 @@ function App() {
           <p className="map-address">서울 마포구 월드컵로 240 2층</p>
           <p className="map-address-sub">(성산동 서울월드컵경기장 서측)</p>
           <div className="map-frame">
-            {!kakaoAppKey ? (
-              <div className="map-placeholder">카카오 지도 앱키(`VITE_KAKAO_MAP_APP_KEY`)를 설정해 주세요.</div>
-            ) : kakaoError ? (
-              <div className="map-placeholder map-error">
-                <p>카카오 지도를 불러오지 못했습니다.</p>
-                <p>1) JavaScript 키인지 확인</p>
-                <p>2) Web 플랫폼 도메인 등록 확인</p>
-                <p className="map-origin">현재 도메인: {window.location.origin}</p>
-              </div>
-            ) : kakaoLoading ? (
-              <div className="map-placeholder">지도를 불러오는 중...</div>
-            ) : (
-              <Map center={venuePosition} level={3} className="kakao-map">
-                <MapMarker position={venuePosition} />
-              </Map>
-            )}
+            <MapContainer
+              center={[venuePosition.lat, venuePosition.lng]}
+              zoom={17}
+              scrollWheelZoom={false}
+              className="leaflet-map"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <CircleMarker center={[venuePosition.lat, venuePosition.lng]} radius={8} pathOptions={{ color: '#8a5f47' }} />
+            </MapContainer>
           </div>
           <div className="actions">
             <a
