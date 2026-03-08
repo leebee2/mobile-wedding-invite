@@ -9,7 +9,7 @@ import 'leaflet/dist/leaflet.css';
 import 'yet-another-react-lightbox/styles.css';
 
 const BASE_URL = import.meta.env.BASE_URL;
-const introImages = [`${BASE_URL}photos/001.jpeg`, `${BASE_URL}photos/003.jpeg`];
+const introImages = [`${BASE_URL}photos/intro-opt/001.jpg`, `${BASE_URL}photos/intro-opt/003.jpg`];
 const archImage = `${BASE_URL}photos/003.jpeg`;
 const galleryImages = [
   `${BASE_URL}photos/001.jpeg`,
@@ -50,6 +50,7 @@ const sectionMotion = {
 
 function App() {
   const [introHidden, setIntroHidden] = useState(false);
+  const [introAssetsReady, setIntroAssetsReady] = useState(false);
   const [introDone, setIntroDone] = useState(() => {
     if (typeof window === 'undefined') {
       return false;
@@ -70,12 +71,36 @@ function App() {
   const [countdown, setCountdown] = useState(getCountdownParts);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    Promise.all(
+      introImages.map(
+        (src) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve;
+            img.src = src;
+          })
+      )
+    ).then(() => {
+      if (active) {
+        setIntroAssetsReady(true);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -90,7 +115,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (introDone) {
+    if (introDone || !introAssetsReady) {
       return;
     }
 
@@ -104,10 +129,10 @@ function App() {
       clearTimeout(hideTimer);
       clearTimeout(doneTimer);
     };
-  }, [introDone]);
+  }, [introDone, introAssetsReady]);
 
   useEffect(() => {
-    if (introHidden) {
+    if (introHidden || !introAssetsReady) {
       return;
     }
 
@@ -121,7 +146,7 @@ function App() {
     }, 95);
 
     return () => clearInterval(timer);
-  }, [introHidden]);
+  }, [introHidden, introAssetsReady]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -130,9 +155,37 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll('.section[data-section-index]'));
+    if (!sections.length) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let best = null;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
+          if (!best || entry.intersectionRatio > best.intersectionRatio) {
+            best = entry;
+          }
+        }
+        if (best) {
+          setActiveSection(Number(best.target.getAttribute('data-section-index')));
+        }
+      },
+      { threshold: [0.35, 0.5, 0.7] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="invite-shell">
-      {!introDone && (
+      {!introDone && introAssetsReady && (
         <div className={`intro-overlay ${introHidden ? 'is-hidden' : ''}`} aria-hidden={introHidden}>
           <div className="intro-frame">
             <img className="intro-image intro-image-1" src={introImages[0]} alt="" />
@@ -150,7 +203,12 @@ function App() {
       )}
 
       <div className="invite-page">
-        <motion.header className="hero section" custom={0} {...sectionMotion}>
+        <motion.header
+          className={`hero section ${activeSection === 0 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="0"
+          custom={0}
+          {...sectionMotion}
+        >
           <div className="hero-arch">
             <img className="hero-image" src={archImage} alt="신랑 신부 메인 사진" />
             <div className="hero-arch-title">
@@ -164,7 +222,12 @@ function App() {
           </div>
         </motion.header>
 
-        <motion.section className="section message" custom={1} {...sectionMotion}>
+        <motion.section
+          className={`section message ${activeSection === 1 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="1"
+          custom={1}
+          {...sectionMotion}
+        >
           <h2>초대합니다</h2>
           <p>
             소중한 분들을 초대합니다
@@ -192,7 +255,12 @@ function App() {
           </p>
         </motion.section>
 
-        <motion.section className="section people" custom={2} {...sectionMotion}>
+        <motion.section
+          className={`section people ${activeSection === 2 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="2"
+          custom={2}
+          {...sectionMotion}
+        >
           <h2>신랑 · 신부</h2>
           <div className="rows">
             <div className="row family-row">
@@ -200,7 +268,7 @@ function App() {
                 <span className="role">신랑</span>
                 <a href="tel:01012345678">신랑 연락하기</a>
               </div>
-              <p className="family-line">류세형 · 이명자의 아들</p>
+              <p className="family-line">류세형 · 이명자의 장남</p>
               <strong>류무민</strong>
             </div>
             <div className="row family-row">
@@ -208,14 +276,20 @@ function App() {
                 <span className="role">신부</span>
                 <a href="tel:01087654321">신부 연락하기</a>
               </div>
-              <p className="family-line">이지홍 · 심미란의 딸</p>
+              <p className="family-line">이지홍 · 심미란의 장녀</p>
               <strong>이소연</strong>
             </div>
           </div>
         </motion.section>
 
-        <motion.section className="section calendar" custom={3} {...sectionMotion}>
-          <h2>Wedding Day</h2>
+        <motion.section
+          className={`section calendar ${activeSection === 3 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="3"
+          custom={3}
+          {...sectionMotion}
+        >
+          <p className="map-eyebrow">Wedding Day</p>
+          <h2>2026. 06. 20. 토요일 오전 11시</h2>
           <div className="calendar-wrap">
             <DayPicker
               mode="single"
@@ -266,7 +340,12 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.section className="section map" custom={4} {...sectionMotion}>
+        <motion.section
+          className={`section map ${activeSection === 4 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="4"
+          custom={4}
+          {...sectionMotion}
+        >
           <p className="map-eyebrow">Location</p>
           <h2>오시는 길</h2>
           <p className="map-venue">월드컵컨벤션</p>
@@ -334,7 +413,12 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.section className="section gallery" custom={6} {...sectionMotion}>
+        <motion.section
+          className={`section gallery ${activeSection === 5 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="5"
+          custom={6}
+          {...sectionMotion}
+        >
           <p className="map-eyebrow">Gallery</p>
           <h2>갤러리</h2>
           <div className="grid">
@@ -354,7 +438,12 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.footer className="section footer" custom={7} {...sectionMotion}>
+        <motion.footer
+          className={`section footer ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="6"
+          custom={7}
+          {...sectionMotion}
+        >
           <p>함께해 주셔서 감사합니다.</p>
         </motion.footer>
       </div>

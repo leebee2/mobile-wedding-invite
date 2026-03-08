@@ -39,7 +39,7 @@ h2,
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: #000;
+  background: #f3eee8;
   transition: opacity 0.8s ease;
 }
 
@@ -117,10 +117,27 @@ h2,
   max-width: 640px;
   margin: 0 auto;
   padding: 24px 16px 40px;
+  scroll-snap-type: y mandatory;
 }
 
 .section + .section {
-  margin-top: 108px;
+  margin-top: 136px;
+}
+
+.section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.section.is-current {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.section.is-dimmed {
+  opacity: 0.2;
+  transform: scale(0.98);
 }
 
 .hero {
@@ -314,6 +331,10 @@ h2 {
   text-align: center;
 }
 
+.calendar .map-eyebrow {
+  text-align: center;
+}
+
 .calendar-caption {
   margin-top: 16px;
   text-align: center;
@@ -373,8 +394,8 @@ h2 {
   --rdp-day_button-border-radius: 999px;
   --rdp-disabled-opacity: 0.35;
   --rdp-outside-opacity: 0.25;
-  background: rgba(255, 250, 244, 0.75);
-  border: 1px solid rgba(138, 95, 71, 0.15);
+  background: transparent;
+  border: 0;
   border-radius: 22px;
   padding: 10px 10px;
   transform: scale(0.94);
@@ -682,7 +703,12 @@ h2 {
   }
 
   .section + .section {
-    margin-top: 82px;
+    margin-top: 104px;
+  }
+
+  .section.is-dimmed {
+    opacity: 0.3;
+    transform: scale(0.99);
   }
 
   .hero {
