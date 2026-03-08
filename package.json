@@ -1,0 +1,26 @@
+{
+  "name": "mobile-wedding-invite",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@r2don/react-naver-map": "^0.0.21",
+    "framer-motion": "^12.35.1",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-day-picker": "^9.14.0",
+    "react-dom": "^18.3.1",
+    "react-kakao-maps-sdk": "^1.2.1",
+    "react-leaflet": "^4.2.1",
+    "yet-another-react-lightbox": "^3.29.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}
