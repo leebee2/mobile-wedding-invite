@@ -36,16 +36,16 @@ function getCountdownParts() {
 
 const sectionMotion = {
   variants: {
-    hidden: { opacity: 0, y: 56 },
+    hidden: { opacity: 0, y: 22 },
     visible: (idx) => ({
       opacity: 1,
       y: 0,
-      transition: { duration: 0.9, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.62, delay: idx * 0.04, ease: [0.22, 1, 0.36, 1] },
     }),
   },
   initial: 'hidden',
   whileInView: 'visible',
-  viewport: { once: false, amount: 0.3 },
+  viewport: { once: true, amount: 0.2 },
 };
 
 function App() {
@@ -76,6 +76,17 @@ function App() {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
+
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = archImage;
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
   }, []);
 
   useEffect(() => {
