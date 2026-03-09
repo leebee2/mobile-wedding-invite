@@ -23,7 +23,6 @@ const weddingDate = new Date(2026, 5, 20);
 const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
 const venuePosition = { lat: 37.56826, lng: 126.89719 };
 const kakaoAppKey = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
-const inviteCanonicalUrl = 'http://moonso-wedding.kro.kr/';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
@@ -33,7 +32,7 @@ const transferGroups = [
     title: '신랑측에게',
     accounts: [
       { label: '신랑', name: '류무민', bank: '카카오뱅크', number: '3333-29-4997161' },
-      { label: '신랑 아버지', name: '류세형', bank: '국민은행', number: '651025-91-112586' },
+      { label: '신랑 아버지', name: '류세형', bank: '농협', number: '356-1603-9701-83' },
       { label: '신랑 어머니', name: '이명자', bank: '우리은행', number: '1002-430-424876' },
     ],
   },
@@ -364,7 +363,7 @@ function App() {
   };
 
   const handleCopyInviteLink = async () => {
-    const url = inviteCanonicalUrl;
+    const url = window.location.href;
     try {
       await navigator.clipboard.writeText(url);
       setToastMessage('청첩장 주소가 복사되었습니다.');
@@ -375,7 +374,8 @@ function App() {
   };
 
   const handleShareInvite = async () => {
-    const shareUrl = inviteCanonicalUrl;
+    const shareUrl = window.location.href;
+    const shareImageUrl = `${window.location.origin}/photos/003.jpeg`;
     console.info('[KAKAO_SHARE_URL]', shareUrl);
     setToastMessage(`공유 URL: ${shareUrl}`);
     window.setTimeout(() => setToastMessage(''), 2200);
@@ -386,7 +386,7 @@ function App() {
         content: {
           title: '류무민 ♥ 이소연 결혼식에 초대합니다',
           description: '2026년 6월 20일 토요일 오전 11시, 월드컵컨벤션 2F 임페리얼볼룸',
-          imageUrl: `${inviteCanonicalUrl}photos/003.jpeg`,
+          imageUrl: shareImageUrl,
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
