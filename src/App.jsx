@@ -84,6 +84,7 @@ function App() {
   const [openTransferMap, setOpenTransferMap] = useState({});
   const audioRef = useRef(null);
   const userPausedRef = useRef(false);
+  const kakaoReadyRef = useRef(false);
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -362,12 +363,7 @@ function App() {
   const handleShareInvite = async () => {
     const shareUrl = getInviteShareUrl();
     try {
-      if (!window.Kakao) {
-        throw new Error('Kakao SDK unavailable');
-      }
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(kakaoAppKey);
-      }
+      await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
         objectType: 'feed',
         content: {
@@ -399,6 +395,52 @@ function App() {
         window.setTimeout(() => setToastMessage(''), 1800);
       }
     }
+  };
+
+  const ensureKakaoReady = async () => {
+    if (!kakaoAppKey) {
+      throw new Error('Missing kakao app key');
+    }
+    if (window.Kakao?.isInitialized?.()) {
+      kakaoReadyRef.current = true;
+      return;
+    }
+
+    const existing = document.getElementById('kakao-share-sdk');
+    if (!existing) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.id = 'kakao-share-sdk';
+        script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    } else if (!window.Kakao) {
+      await new Promise((resolve, reject) => {
+        const onLoad = () => {
+          existing.removeEventListener('load', onLoad);
+          existing.removeEventListener('error', onError);
+          resolve();
+        };
+        const onError = () => {
+          existing.removeEventListener('load', onLoad);
+          existing.removeEventListener('error', onError);
+          reject(new Error('Kakao SDK load failed'));
+        };
+        existing.addEventListener('load', onLoad);
+        existing.addEventListener('error', onError);
+      });
+    }
+
+    if (!window.Kakao) {
+      throw new Error('Kakao SDK unavailable');
+    }
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoAppKey);
+    }
+    kakaoReadyRef.current = true;
   };
 
   const toggleBgm = async () => {
@@ -480,21 +522,10 @@ function App() {
   }, [kakaoAppKey]);
 
   useEffect(() => {
-    if (!kakaoAppKey) {
+    if (!kakaoAppKey || kakaoReadyRef.current) {
       return;
     }
-    if (window.Kakao) {
-      return;
-    }
-    const existingScript = document.getElementById('kakao-share-sdk');
-    if (existingScript) {
-      return;
-    }
-    const script = document.createElement('script');
-    script.id = 'kakao-share-sdk';
-    script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
-    script.async = true;
-    document.head.appendChild(script);
+    ensureKakaoReady().catch(() => {});
   }, [kakaoAppKey]);
 
   return (
