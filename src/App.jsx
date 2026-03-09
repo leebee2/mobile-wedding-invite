@@ -324,17 +324,6 @@ function App() {
     }
   };
 
-  const getInviteShareUrl = () => {
-    if (typeof window === 'undefined') {
-      return inviteCanonicalUrl;
-    }
-    const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1') {
-      return inviteCanonicalUrl;
-    }
-    return window.location.href;
-  };
-
   const handleCopyAccount = async (accountNo) => {
     if (!accountNo) {
       return;
@@ -350,7 +339,7 @@ function App() {
   };
 
   const handleCopyInviteLink = async () => {
-    const url = getInviteShareUrl();
+    const url = inviteCanonicalUrl;
     try {
       await navigator.clipboard.writeText(url);
       setToastMessage('청첩장 주소가 복사되었습니다.');
@@ -361,7 +350,7 @@ function App() {
   };
 
   const handleShareInvite = async () => {
-    const shareUrl = getInviteShareUrl();
+    const shareUrl = inviteCanonicalUrl;
     try {
       await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
