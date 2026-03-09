@@ -97,10 +97,16 @@ function App() {
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const [openTransferMap, setOpenTransferMap] = useState({});
   const [guestbookName, setGuestbookName] = useState('');
+  const [guestbookPassword, setGuestbookPassword] = useState('');
   const [guestbookMessage, setGuestbookMessage] = useState('');
   const [guestbookItems, setGuestbookItems] = useState([]);
   const [guestbookLoading, setGuestbookLoading] = useState(true);
   const [guestbookSubmitting, setGuestbookSubmitting] = useState(false);
+  const [guestbookModalOpen, setGuestbookModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteSubmitting, setDeleteSubmitting] = useState(false);
   const audioRef = useRef(null);
   const userPausedRef = useRef(false);
   const kakaoReadyRef = useRef(false);
@@ -572,38 +578,96 @@ function App() {
   const handleGuestbookSubmit = async (e) => {
     e.preventDefault();
     const name = guestbookName.trim();
+    const password = guestbookPassword.trim();
     const message = guestbookMessage.trim();
-    if (!name || !message) {
-      setToastMessage('이름과 메시지를 입력해 주세요.');
+    if (!name || !password || !message) {
+      setToastMessage('이름, 번호, 메시지를 입력해주세요.');
       window.setTimeout(() => setToastMessage(''), 1800);
-      return;
+      return false;
     }
 
     if (!supabase) {
       setToastMessage('Supabase 설정이 필요합니다.');
       window.setTimeout(() => setToastMessage(''), 1800);
-      return;
+      return false;
     }
 
     setGuestbookSubmitting(true);
     const { data, error } = await supabase
       .from('guestbook')
-      .insert({ name, message })
+      .insert({ name, password, message })
       .select('id, name, message, created_at')
       .single();
 
     if (error) {
       setToastMessage('방명록 저장에 실패했습니다.');
       window.setTimeout(() => setToastMessage(''), 1800);
+      setGuestbookSubmitting(false);
+      return false;
     } else if (data) {
       setGuestbookItems((prev) => [data, ...prev].slice(0, 30));
       setGuestbookName('');
+      setGuestbookPassword('');
       setGuestbookMessage('');
       setToastMessage('방명록이 등록되었습니다.');
       window.setTimeout(() => setToastMessage(''), 1800);
+      setGuestbookSubmitting(false);
+      return true;
     }
     setGuestbookSubmitting(false);
+    return false;
   };
+
+  const openDeleteModal = (id) => {
+    setDeleteTargetId(id);
+    setDeletePassword('');
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteGuestbook = async (e) => {
+    e.preventDefault();
+    if (!supabase) {
+      setToastMessage('Supabase 설정이 필요합니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return;
+    }
+    const password = deletePassword.trim();
+    if (!password) {
+      return;
+    }
+
+    setDeleteSubmitting(true);
+    const { data, error } = await supabase.rpc('delete_guestbook_entry', {
+      entry_id: deleteTargetId,
+      entry_password: password,
+    });
+
+    if (error) {
+      setToastMessage('삭제에 실패했습니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+      setDeleteSubmitting(false);
+      return;
+    }
+
+    if (data === true) {
+      setGuestbookItems((prev) => prev.filter((item) => item.id !== deleteTargetId));
+      setToastMessage('방명록이 삭제되었습니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+      setDeleteModalOpen(false);
+      setDeleteTargetId(null);
+      setDeletePassword('');
+      setDeleteSubmitting(false);
+      return;
+    }
+
+    setToastMessage('비밀번호가 일치하지 않습니다.');
+    window.setTimeout(() => setToastMessage(''), 1800);
+    setDeleteSubmitting(false);
+  };
+
+  const canSubmitGuestbook =
+    guestbookName.trim().length > 0 && guestbookPassword.trim().length > 0 && guestbookMessage.trim().length > 0;
+  const canSubmitDelete = deletePassword.trim().length > 0;
 
   return (
     <div className="invite-shell">
@@ -1131,25 +1195,9 @@ function App() {
         >
           <p className="map-eyebrow">Guestbook</p>
           <h2>방명록</h2>
-          <form className="guestbook-form" onSubmit={handleGuestbookSubmit}>
-            <input
-              type="text"
-              value={guestbookName}
-              onChange={(e) => setGuestbookName(e.target.value)}
-              placeholder="이름"
-              maxLength={20}
-            />
-            <textarea
-              value={guestbookMessage}
-              onChange={(e) => setGuestbookMessage(e.target.value)}
-              placeholder="축하 메시지를 남겨 주세요"
-              maxLength={300}
-              rows={4}
-            />
-            <button type="submit" disabled={guestbookSubmitting}>
-              {guestbookSubmitting ? '등록 중...' : '메시지 남기기'}
-            </button>
-          </form>
+          <button type="button" className="guestbook-write-btn" onClick={() => setGuestbookModalOpen(true)}>
+            작성하기
+          </button>
           <div className="guestbook-list">
             {guestbookLoading ? (
               <p className="guestbook-empty">불러오는 중...</p>
@@ -1157,10 +1205,18 @@ function App() {
               guestbookItems.map((item) => (
                 <article key={item.id} className="guestbook-item">
                   <header>
-                    <strong>{item.name}</strong>
-                    <span>{formatGuestbookDate(item.created_at)}</span>
+                    <strong>from. {item.name}</strong>
+                    <button
+                      type="button"
+                      className="guestbook-delete-btn"
+                      onClick={() => openDeleteModal(item.id)}
+                      aria-label="방명록 삭제"
+                    >
+                      ×
+                    </button>
                   </header>
                   <p>{item.message}</p>
+                  <span className="guestbook-date">{formatGuestbookDate(item.created_at)}</span>
                 </article>
               ))
             ) : (
@@ -1208,6 +1264,106 @@ function App() {
           {galleryImages.map((_, idx) => (
             <span key={`dot-${idx}`} className={`lightbox-dot ${idx === lightboxIndex ? 'is-active' : ''}`} />
           ))}
+        </div>
+      )}
+
+      {guestbookModalOpen && (
+        <div className="guestbook-modal-overlay" role="dialog" aria-modal="true" aria-label="방명록 작성">
+          <div className="guestbook-modal">
+            <div className="guestbook-modal-head">
+              <h3>방명록 작성</h3>
+              <button type="button" onClick={() => setGuestbookModalOpen(false)} aria-label="닫기">
+                ×
+              </button>
+            </div>
+            <form
+              className="guestbook-modal-form"
+              onSubmit={async (e) => {
+                const ok = await handleGuestbookSubmit(e);
+                if (ok) {
+                  setGuestbookModalOpen(false);
+                }
+              }}
+            >
+              <label>
+                작성자 성함 <span>*</span>
+                <input
+                  type="text"
+                  value={guestbookName}
+                  onChange={(e) => setGuestbookName(e.target.value)}
+                  placeholder="예: 홍길동"
+                  maxLength={20}
+                />
+              </label>
+              <label>
+                비밀번호 <span>*</span>
+                <input
+                  type="password"
+                  value={guestbookPassword}
+                  onChange={(e) => setGuestbookPassword(e.target.value)}
+                  placeholder="방명록을 삭제할 때 사용됩니다"
+                  maxLength={20}
+                />
+              </label>
+              <label>
+                방명록 내용 <span>*</span>
+                <textarea
+                  value={guestbookMessage}
+                  onChange={(e) => setGuestbookMessage(e.target.value)}
+                  placeholder="신랑 신부의 결혼을 축하해주세요"
+                  maxLength={300}
+                  rows={5}
+                />
+              </label>
+              <button
+                type="submit"
+                className={canSubmitGuestbook ? 'is-ready' : ''}
+                disabled={guestbookSubmitting || !canSubmitGuestbook}
+              >
+                {guestbookSubmitting ? '등록 중...' : '확인'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {deleteModalOpen && (
+        <div className="guestbook-modal-overlay" role="dialog" aria-modal="true" aria-label="방명록 삭제">
+          <div className="guestbook-modal delete-modal">
+            <div className="guestbook-modal-head">
+              <h3>방명록 삭제</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setDeleteModalOpen(false);
+                  setDeleteTargetId(null);
+                  setDeletePassword('');
+                }}
+                aria-label="닫기"
+              >
+                ×
+              </button>
+            </div>
+            <form className="guestbook-modal-form" onSubmit={handleDeleteGuestbook}>
+              <label>
+                삭제 비밀번호 <span>*</span>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder="삭제 비밀번호를 입력해 주세요"
+                  maxLength={20}
+                />
+              </label>
+              <button
+                type="submit"
+                className={canSubmitDelete ? 'is-ready' : ''}
+                disabled={deleteSubmitting || !canSubmitDelete}
+              >
+                {deleteSubmitting ? '삭제 중...' : '삭제하기'}
+              </button>
+            </form>
+          </div>
         </div>
       )}
 

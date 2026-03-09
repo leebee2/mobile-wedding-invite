@@ -666,55 +666,30 @@ h2 {
   text-align: center;
 }
 
-.guestbook-form {
-  margin-top: 14px;
-  display: grid;
-  gap: 8px;
-}
-
-.guestbook-form input,
-.guestbook-form textarea {
-  width: 100%;
-  border: 1px solid rgba(78, 59, 49, 0.15);
-  background: #fffaf6;
-  color: #4e3b31;
-  border-radius: 10px;
-  padding: 11px 12px;
-  font-size: 0.94rem;
-  font-family: inherit;
-}
-
-.guestbook-form textarea {
-  resize: vertical;
-  min-height: 90px;
-}
-
-.guestbook-form button {
+.guestbook-write-btn {
+  margin: 14px auto 0;
+  width: 190px;
+  display: block;
   border: 0;
-  border-radius: 10px;
-  padding: 11px 12px;
+  border-radius: 8px;
+  padding: 12px 14px;
   background: #b79b85;
   color: #fff;
-  font-size: 0.94rem;
+  font-size: 0.95rem;
   cursor: pointer;
 }
 
-.guestbook-form button:disabled {
-  opacity: 0.65;
-  cursor: default;
-}
-
 .guestbook-list {
-  margin-top: 12px;
+  margin-top: 18px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .guestbook-item {
-  background: #fffaf4;
-  border: 1px solid rgba(78, 59, 49, 0.1);
+  background: #fff;
+  border: 1px solid #efefef;
   border-radius: 10px;
-  padding: 10px 11px;
+  padding: 14px 14px 12px;
 }
 
 .guestbook-item header {
@@ -722,30 +697,155 @@ h2 {
   justify-content: space-between;
   gap: 8px;
   align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 10px;
 }
 
 .guestbook-item header strong {
   color: #4e3b31;
-  font-size: 0.94rem;
+  font-size: 0.99rem;
+  font-weight: 500;
 }
 
-.guestbook-item header span {
-  color: #9c8b7f;
-  font-size: 0.75rem;
-  white-space: nowrap;
+.guestbook-delete-btn {
+  border: 0;
+  background: transparent;
+  color: #6e6c6a;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
 }
 
 .guestbook-item p {
-  margin: 7px 0 0;
+  margin: 10px 0 0;
   line-height: 1.6;
   color: #4e3b31;
   text-align: left;
+  white-space: pre-wrap;
+}
+
+.guestbook-date {
+  display: block;
+  margin-top: 8px;
+  text-align: right;
+  color: #9c8b7f;
+  font-size: 0.75rem;
+  white-space: nowrap;
 }
 
 .guestbook-empty {
   margin: 4px 0 0;
   text-align: center;
   color: #8d7b70;
+}
+
+.guestbook-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.46);
+  z-index: 22000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.guestbook-modal {
+  width: min(420px, 100%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+  padding: 16px 14px 14px;
+}
+
+.delete-modal {
+  width: min(360px, 100%);
+}
+
+.guestbook-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.guestbook-modal-head h3 {
+  margin: 0;
+  color: #252525;
+  font-size: 1.46rem;
+  font-weight: 700;
+}
+
+.guestbook-modal-head button {
+  border: 0;
+  background: transparent;
+  color: #9aa1aa;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.guestbook-modal-form {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.guestbook-modal-form label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 4px;
+  row-gap: 6px;
+  color: #3b3b3b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.guestbook-modal-form label span {
+  color: #d05858;
+}
+
+.guestbook-modal-form input,
+.guestbook-modal-form textarea {
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #4e3b31;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.guestbook-modal-form textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.guestbook-modal-form button[type='submit'] {
+  margin-top: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: #c3c3c5;
+  color: #fff;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.guestbook-modal-form button[type='submit']:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.guestbook-modal-form button[type='submit'].is-ready {
+  background: #b79b85;
 }
 
 .transfer-wrap {
@@ -1221,6 +1321,8 @@ h2 {
   border-radius: 12px;
   font-size: 0.86rem;
   line-height: 1;
+  white-space: nowrap;
+  max-width: calc(100vw - 24px);
 }
 
 .intro-copy p,
