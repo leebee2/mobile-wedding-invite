@@ -50,22 +50,7 @@ const sectionMotion = {
 function App() {
   const [introHidden, setIntroHidden] = useState(false);
   const [introAssetsReady, setIntroAssetsReady] = useState(false);
-  const [introDone, setIntroDone] = useState(() => {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-
-    const navEntry = window.performance?.getEntriesByType?.('navigation')?.[0];
-    const isReloadByEntry = navEntry?.type === 'reload';
-    const isReloadByLegacy = window.performance?.navigation?.type === 1;
-
-    if (isReloadByEntry || isReloadByLegacy) {
-      window.localStorage.setItem('invite_intro_seen', 'false');
-      return false;
-    }
-
-    return window.localStorage.getItem('invite_intro_seen') === 'true';
-  });
+  const [introDone, setIntroDone] = useState(false);
   const [typedText, setTypedText] = useState('');
   const [countdown, setCountdown] = useState(getCountdownParts);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -123,7 +108,6 @@ function App() {
     const hideTimer = setTimeout(() => setIntroHidden(true), 3400);
     const doneTimer = setTimeout(() => {
       setIntroDone(true);
-      window.localStorage.setItem('invite_intro_seen', 'true');
     }, 4200);
 
     return () => {
