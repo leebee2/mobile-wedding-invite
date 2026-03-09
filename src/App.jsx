@@ -376,9 +376,6 @@ function App() {
   const handleShareInvite = async () => {
     const shareUrl = window.location.href;
     const shareImageUrl = `${window.location.origin}/photos/003.jpeg`;
-    console.info('[KAKAO_SHARE_URL]', shareUrl);
-    setToastMessage(`공유 URL: ${shareUrl}`);
-    window.setTimeout(() => setToastMessage(''), 2200);
     try {
       await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
