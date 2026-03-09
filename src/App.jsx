@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { DayPicker } from 'react-day-picker';
 import Lightbox from 'yet-another-react-lightbox';
+import { createClient } from '@supabase/supabase-js';
 import { ko } from 'date-fns/locale';
 import 'react-day-picker/style.css';
 import 'yet-another-react-lightbox/styles.css';
@@ -23,6 +24,9 @@ const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
 const venuePosition = { lat: 37.56826, lng: 126.89719 };
 const kakaoAppKey = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
 const inviteCanonicalUrl = 'http://moonso-wedding.kro.kr/';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 const transferGroups = [
   {
     key: 'groom',
@@ -55,6 +59,16 @@ function getCountdownParts() {
   return { days, hours, minutes, seconds };
 }
 
+function formatGuestbookDate(value) {
+  const date = new Date(value);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mi = String(date.getMinutes()).padStart(2, '0');
+  return `${yyyy}.${mm}.${dd} ${hh}:${mi}`;
+}
+
 const sectionMotion = {
   variants: {
     hidden: { opacity: 0, y: 22 },
@@ -82,6 +96,11 @@ function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const [openTransferMap, setOpenTransferMap] = useState({});
+  const [guestbookName, setGuestbookName] = useState('');
+  const [guestbookMessage, setGuestbookMessage] = useState('');
+  const [guestbookItems, setGuestbookItems] = useState([]);
+  const [guestbookLoading, setGuestbookLoading] = useState(true);
+  const [guestbookSubmitting, setGuestbookSubmitting] = useState(false);
   const audioRef = useRef(null);
   const userPausedRef = useRef(false);
   const kakaoReadyRef = useRef(false);
@@ -351,6 +370,9 @@ function App() {
 
   const handleShareInvite = async () => {
     const shareUrl = inviteCanonicalUrl;
+    console.info('[KAKAO_SHARE_URL]', shareUrl);
+    setToastMessage(`공유 URL: ${shareUrl}`);
+    window.setTimeout(() => setToastMessage(''), 2200);
     try {
       await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
@@ -366,7 +388,7 @@ function App() {
         },
         buttons: [
           {
-            title: '청첩장 보기',
+            title: '모바일 청첩장 보기',
             link: {
               mobileWebUrl: shareUrl,
               webUrl: shareUrl,
@@ -516,6 +538,72 @@ function App() {
     }
     ensureKakaoReady().catch(() => {});
   }, [kakaoAppKey]);
+
+  useEffect(() => {
+    if (!supabase) {
+      setGuestbookLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    const fetchGuestbook = async () => {
+      const { data, error } = await supabase
+        .from('guestbook')
+        .select('id, name, message, created_at')
+        .order('created_at', { ascending: false })
+        .limit(30);
+
+      if (!cancelled) {
+        if (error) {
+          setGuestbookItems([]);
+        } else {
+          setGuestbookItems(data || []);
+        }
+        setGuestbookLoading(false);
+      }
+    };
+
+    fetchGuestbook();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleGuestbookSubmit = async (e) => {
+    e.preventDefault();
+    const name = guestbookName.trim();
+    const message = guestbookMessage.trim();
+    if (!name || !message) {
+      setToastMessage('이름과 메시지를 입력해 주세요.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return;
+    }
+
+    if (!supabase) {
+      setToastMessage('Supabase 설정이 필요합니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return;
+    }
+
+    setGuestbookSubmitting(true);
+    const { data, error } = await supabase
+      .from('guestbook')
+      .insert({ name, message })
+      .select('id, name, message, created_at')
+      .single();
+
+    if (error) {
+      setToastMessage('방명록 저장에 실패했습니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+    } else if (data) {
+      setGuestbookItems((prev) => [data, ...prev].slice(0, 30));
+      setGuestbookName('');
+      setGuestbookMessage('');
+      setToastMessage('방명록이 등록되었습니다.');
+      window.setTimeout(() => setToastMessage(''), 1800);
+    }
+    setGuestbookSubmitting(false);
+  };
 
   return (
     <div className="invite-shell">
@@ -1036,9 +1124,55 @@ function App() {
         </motion.section>
 
         <motion.footer
-          className={`section footer ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
+          className={`section guestbook ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
           data-section-index="6"
           custom={7}
+          {...sectionMotion}
+        >
+          <p className="map-eyebrow">Guestbook</p>
+          <h2>방명록</h2>
+          <form className="guestbook-form" onSubmit={handleGuestbookSubmit}>
+            <input
+              type="text"
+              value={guestbookName}
+              onChange={(e) => setGuestbookName(e.target.value)}
+              placeholder="이름"
+              maxLength={20}
+            />
+            <textarea
+              value={guestbookMessage}
+              onChange={(e) => setGuestbookMessage(e.target.value)}
+              placeholder="축하 메시지를 남겨 주세요"
+              maxLength={300}
+              rows={4}
+            />
+            <button type="submit" disabled={guestbookSubmitting}>
+              {guestbookSubmitting ? '등록 중...' : '메시지 남기기'}
+            </button>
+          </form>
+          <div className="guestbook-list">
+            {guestbookLoading ? (
+              <p className="guestbook-empty">불러오는 중...</p>
+            ) : guestbookItems.length ? (
+              guestbookItems.map((item) => (
+                <article key={item.id} className="guestbook-item">
+                  <header>
+                    <strong>{item.name}</strong>
+                    <span>{formatGuestbookDate(item.created_at)}</span>
+                  </header>
+                  <p>{item.message}</p>
+                </article>
+              ))
+            ) : (
+              <p className="guestbook-empty">첫 축하 메시지를 남겨 주세요.</p>
+            )}
+          </div>
+        </motion.footer>
+
+        <motion.footer
+          className={`section footer ${activeSection === 7 ? 'is-current' : 'is-dimmed'}`}
+          data-section-index="7"
+          custom={8}
           {...sectionMotion}
         >
           <div className="share-actions">

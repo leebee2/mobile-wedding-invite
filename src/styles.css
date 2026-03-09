@@ -661,6 +661,93 @@ h2 {
   line-height: 1.75;
 }
 
+.guestbook h2,
+.guestbook .map-eyebrow {
+  text-align: center;
+}
+
+.guestbook-form {
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.guestbook-form input,
+.guestbook-form textarea {
+  width: 100%;
+  border: 1px solid rgba(78, 59, 49, 0.15);
+  background: #fffaf6;
+  color: #4e3b31;
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 0.94rem;
+  font-family: inherit;
+}
+
+.guestbook-form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.guestbook-form button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: #b79b85;
+  color: #fff;
+  font-size: 0.94rem;
+  cursor: pointer;
+}
+
+.guestbook-form button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.guestbook-list {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.guestbook-item {
+  background: #fffaf4;
+  border: 1px solid rgba(78, 59, 49, 0.1);
+  border-radius: 10px;
+  padding: 10px 11px;
+}
+
+.guestbook-item header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.guestbook-item header strong {
+  color: #4e3b31;
+  font-size: 0.94rem;
+}
+
+.guestbook-item header span {
+  color: #9c8b7f;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.guestbook-item p {
+  margin: 7px 0 0;
+  line-height: 1.6;
+  color: #4e3b31;
+  text-align: left;
+}
+
+.guestbook-empty {
+  margin: 4px 0 0;
+  text-align: center;
+  color: #8d7b70;
+}
+
 .transfer-wrap {
   margin-top: 18px;
   display: grid;

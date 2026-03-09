@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@r2don/react-naver-map": "^0.0.21",
+    "@supabase/supabase-js": "^2.99.0",
     "framer-motion": "^12.35.1",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
