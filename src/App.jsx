@@ -22,7 +22,7 @@ const weddingDate = new Date(2026, 5, 20);
 const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
 const venuePosition = { lat: 37.56826, lng: 126.89719 };
 const kakaoAppKey = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
-const inviteCanonicalUrl = 'https://moonso-wedding.kro.kr/';
+const inviteCanonicalUrl = 'http://moonso-wedding.kro.kr/';
 const transferGroups = [
   {
     key: 'groom',
