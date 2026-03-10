@@ -32,7 +32,7 @@ const transferGroups = [
     title: '신랑측에게',
     accounts: [
       { label: '신랑', name: '류무민', bank: '카카오뱅크', number: '3333-29-4997161' },
-      { label: '신랑 아버지', name: '류세형', bank: '농협', number: '356-1603-9701-83' },
+      { label: '신랑 아버지', name: '류세형', bank: '국민은행', number: '651025-91-112586' },
       { label: '신랑 어머니', name: '이명자', bank: '우리은행', number: '1002-430-424876' },
     ],
   },
@@ -41,7 +41,7 @@ const transferGroups = [
     title: '신부측에게',
     accounts: [
       { label: '신부', name: '이소연', bank: '토스뱅크', number: '1000-6214-7063' },
-      { label: '신부 아버지', name: '이지홍', bank: '농협은행', number: '351-1234-5678-93' },
+      { label: '신부 아버지', name: '이지홍', bank: '농협', number: '356-1603-9701-83' },
       { label: '신부 어머니', name: '심미란', bank: '우리은행', number: '1002-640-220490' },
     ],
   },
