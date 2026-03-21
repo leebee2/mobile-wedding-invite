@@ -470,7 +470,7 @@ function App() {
 
   const handleShareInvite = async () => {
     const shareUrl = window.location.href;
-    const shareImageUrl = new URL(`${BASE_URL}photos/main.jpeg`, window.location.href).href;
+    const shareImageUrl = new URL(`${BASE_URL}photos/main-share.jpeg`, window.location.href).href;
     try {
       await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
