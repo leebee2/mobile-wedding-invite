@@ -9,15 +9,38 @@ import 'yet-another-react-lightbox/styles.css';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const introImages = [`${BASE_URL}photos/intro-opt/001.jpg`, `${BASE_URL}photos/intro-opt/003.jpg`];
-const archImage = `${BASE_URL}photos/003.jpeg`;
-const galleryImages = [
-  { thumb: `${BASE_URL}photos/thumbs/001.jpg`, full: `${BASE_URL}photos/001.jpeg` },
-  { thumb: `${BASE_URL}photos/thumbs/002.jpg`, full: `${BASE_URL}photos/002.jpeg` },
-  { thumb: `${BASE_URL}photos/thumbs/003.jpg`, full: `${BASE_URL}photos/003.jpeg` },
-  { thumb: `${BASE_URL}photos/thumbs/004.jpg`, full: `${BASE_URL}photos/004.jpeg` },
-  { thumb: `${BASE_URL}photos/thumbs/005.jpg`, full: `${BASE_URL}photos/005.jpeg` },
+const archImage = `${BASE_URL}photos/main.jpeg`;
+const galleryFiles = [
+  { full: 'YG_00081.jpg', thumb: 'YG_00081.jpg' },
+  { full: 'YG_00277.jpg', thumb: 'YG_00277.jpg' },
+  { full: '002.jpeg', thumb: '002.jpg' },
+  { full: 'YG_00337.jpg', thumb: 'YG_00337.jpg' },
+  { full: 'YG_00566.jpg', thumb: 'YG_00566.jpg' },
+  { full: 'YG_00671.jpg', thumb: 'YG_00671.jpg' },
+  { full: 'YG_00849.jpg', thumb: 'YG_00849.jpg' },
+  { full: 'YG_00907.jpg', thumb: 'YG_00907.jpg' },
+  { full: 'YG_00970.jpg', thumb: 'YG_00970.jpg' },
+  { full: 'YG_01006.jpg', thumb: 'YG_01006.jpg' },
+  { full: 'YG_01176.jpg', thumb: 'YG_01176.jpg' },
+  { full: '004.jpeg', thumb: '004.jpg' },
+  { full: 'YG_01812.jpg', thumb: 'YG_01812.jpg' },
+  { full: '003.jpeg', thumb: '003.jpg' },
+  { full: 'YG_02075.jpg', thumb: 'YG_02075.jpg' },
+  { full: 'YG_02348.jpg', thumb: 'YG_02348.jpg' },
+  { full: 'YG_02359.jpg', thumb: 'YG_02359.jpg' },
+  { full: 'YG_02490.jpg', thumb: 'YG_02490.jpg' },
+  { full: 'YG_02690.jpg', thumb: 'YG_02690.jpg' },
+  { full: 'YG_02792.jpg', thumb: 'YG_02792.jpg' },
+  { full: 'YG_02944.jpg', thumb: 'YG_02944.jpg' },
+  { full: 'YG_02976.jpg', thumb: 'YG_02976.jpg' },
 ];
-const titleText = 'Our Wedding Day';
+const galleryImages = galleryFiles.map((file) => ({
+  thumb: `${BASE_URL}photos/thumbs/${file.thumb}`,
+  full: `${BASE_URL}photos/${file.full}`,
+}));
+const galleryPreviewCount = 6;
+const introTitleLines = ["We're", 'getting', 'married'];
+const titleText = introTitleLines.join(' ');
 const bgmSrc = `${BASE_URL}photos/krasnoshchok-wedding-romantic-love-music-409293.mp3`;
 const weddingDate = new Date(2026, 5, 20);
 const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
@@ -82,18 +105,41 @@ const sectionMotion = {
   viewport: { once: true, amount: 0.08 },
 };
 
+function RevealText({ as: Tag = 'p', className = '', lines = [], baseDelay = 0, lineClassName = '', active = true }) {
+  return (
+    <Tag className={className}>
+      {lines.map((line, index) => (
+        <span key={`${className}-${index}`} className={`reveal-line ${lineClassName}`.trim()}>
+          <motion.span
+            className="reveal-line-inner"
+            initial={{ opacity: 0, y: '115%' }}
+            animate={active ? { opacity: 1, y: '0%' } : { opacity: 0, y: '115%' }}
+            transition={{ duration: 0.68, delay: baseDelay + index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {line}
+          </motion.span>
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
 function App() {
   const [introHidden, setIntroHidden] = useState(false);
   const [introAssetsReady, setIntroAssetsReady] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const [typedText, setTypedText] = useState('');
   const [countdown, setCountdown] = useState(getCountdownParts);
+  const [galleryExpanded, setGalleryExpanded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
+  const [revealedSections, setRevealedSections] = useState({ 0: true });
   const [mapError, setMapError] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [bgmPlaying, setBgmPlaying] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [transportGuideVisible, setTransportGuideVisible] = useState(false);
   const [openTransferMap, setOpenTransferMap] = useState({});
   const [guestbookName, setGuestbookName] = useState('');
   const [guestbookPassword, setGuestbookPassword] = useState('');
@@ -102,13 +148,28 @@ function App() {
   const [guestbookLoading, setGuestbookLoading] = useState(true);
   const [guestbookSubmitting, setGuestbookSubmitting] = useState(false);
   const [guestbookModalOpen, setGuestbookModalOpen] = useState(false);
+  const [guestbookViewerOpen, setGuestbookViewerOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [deletePassword, setDeletePassword] = useState('');
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
   const audioRef = useRef(null);
+  const transportGuideRef = useRef(null);
   const userPausedRef = useRef(false);
   const kakaoReadyRef = useRef(false);
+  const typedIntroLines = (() => {
+    let remaining = typedText.length;
+    return introTitleLines.map((line, index) => {
+      const visibleCount = Math.max(0, Math.min(line.length, remaining));
+      const visibleText = line.slice(0, visibleCount);
+      remaining -= visibleCount;
+      if (index < introTitleLines.length - 1 && remaining > 0) {
+        remaining -= 1;
+      }
+      return visibleText;
+    });
+  })();
+  const lastVisibleIntroLine = Math.max(typedIntroLines.findLastIndex((line) => line.length > 0), 0);
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -156,10 +217,10 @@ function App() {
       return;
     }
 
-    const hideTimer = setTimeout(() => setIntroHidden(true), 3400);
+    const hideTimer = setTimeout(() => setIntroHidden(true), 5200);
     const doneTimer = setTimeout(() => {
       setIntroDone(true);
-    }, 4200);
+    }, 6500);
 
     return () => {
       clearTimeout(hideTimer);
@@ -190,6 +251,36 @@ function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowScrollTop(window.scrollY > 520);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!transportGuideRef.current || transportGuideVisible) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          setTransportGuideVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.18 }
+    );
+
+    observer.observe(transportGuideRef.current);
+    return () => observer.disconnect();
+  }, [transportGuideVisible]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -310,6 +401,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    setRevealedSections((prev) => (prev[activeSection] ? prev : { ...prev, [activeSection]: true }));
+  }, [activeSection]);
+
+  useEffect(() => {
     const sections = Array.from(document.querySelectorAll('.section[data-section-index]'));
     if (!sections.length) {
       return;
@@ -375,7 +470,7 @@ function App() {
 
   const handleShareInvite = async () => {
     const shareUrl = window.location.href;
-    const shareImageUrl = `${window.location.origin}/photos/003.jpeg`;
+    const shareImageUrl = `${window.location.origin}/photos/main.jpeg`;
     try {
       await ensureKakaoReady();
       window.Kakao.Link.sendDefault({
@@ -664,6 +759,13 @@ function App() {
 
   const canSubmitGuestbook =
     guestbookName.trim().length > 0 && guestbookPassword.trim().length > 0 && guestbookMessage.trim().length > 0;
+
+  const openGuestbookModal = () => {
+    setGuestbookName('');
+    setGuestbookPassword('');
+    setGuestbookMessage('');
+    setGuestbookModalOpen(true);
+  };
   const canSubmitDelete = deletePassword.trim().length > 0;
 
   return (
@@ -685,12 +787,21 @@ function App() {
             <img className="intro-image intro-image-2" src={introImages[1]} alt="" />
           </div>
           <div className="intro-copy">
-            <p>류무민 &#9829; 이소연</p>
             <h2 className="typewriter">
-              {typedText}
-              <span className={`cursor ${introHidden ? 'hidden' : ''}`}>|</span>
+              {typedIntroLines.map((line, index) => (
+                <span key={introTitleLines[index]} className={`typewriter-line typewriter-line-${index + 1}`}>
+                  <span className="typewriter-line-inner">
+                    <span className="typewriter-line-ghost" aria-hidden="true">
+                      {introTitleLines[index]}
+                    </span>
+                    <span className="typewriter-line-text">
+                      {line}
+                      {index === lastVisibleIntroLine && <span className={`cursor ${introHidden ? 'hidden' : ''}`}>|</span>}
+                    </span>
+                  </span>
+                </span>
+              ))}
             </h2>
-            <p>2026.06.20 SAT AM 11:00</p>
           </div>
         </div>
       )}
@@ -721,15 +832,61 @@ function App() {
               </svg>
             )}
           </button>
-          <div className="hero-arch">
-            <img className="hero-image" src={archImage} alt="신랑 신부 메인 사진" />
-            <div className="hero-arch-title">
-              <span>Our</span>
-              <span>Wedding Day</span>
-            </div>
-            <div className="hero-arch-bottom">
-              <div className="hero-arch-sub hero-arch-names">류무민 &#9829; 이소연</div>
-              <div className="hero-arch-sub hero-arch-date">2026.06.20 SAT AM 11:00</div>
+          <div className="hero-stack">
+            <div className="hero-paper">
+              <div className="hero-paper-head">
+                <RevealText
+                  as="div"
+                  className="hero-paper-kicker"
+                  lines={['Wedding Invitation']}
+                  active={Boolean(revealedSections[0])}
+                />
+                <RevealText
+                  as="div"
+                  className="hero-paper-date"
+                  lines={['Saturday, June 20, 2026']}
+                  baseDelay={0.06}
+                  active={Boolean(revealedSections[0])}
+                />
+              </div>
+              <RevealText
+                as="div"
+                className="hero-heading"
+                lineClassName="hero-arch-title-line"
+                lines={['Our', 'Wedding Day']}
+                active={Boolean(revealedSections[0])}
+              />
+              <div className="hero-paper-rule" aria-hidden="true" />
+              <div className="hero-frame">
+                <img className="hero-image" src={archImage} alt="신랑 신부 메인 사진" />
+              </div>
+              <div className="hero-meta">
+                <RevealText
+                  as="div"
+                  className="hero-paper-label"
+                  lines={['Moomin Ryu and Soyeon Lee']}
+                  baseDelay={0.12}
+                  active={Boolean(revealedSections[0])}
+                />
+                <div className="hero-paper-bottom">
+                  <RevealText
+                    as="div"
+                    className="hero-arch-sub hero-arch-names"
+                    lineClassName="hero-arch-names-line"
+                    lines={['류무민 ♥ 이소연']}
+                    baseDelay={0.18}
+                    active={Boolean(revealedSections[0])}
+                  />
+                  <RevealText
+                    as="div"
+                    className="hero-arch-sub hero-arch-date"
+                    lineClassName="hero-arch-date-line"
+                    lines={['2026.06.20 SAT AM 11:00']}
+                    baseDelay={0.28}
+                    active={Boolean(revealedSections[0])}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </motion.header>
@@ -740,21 +897,22 @@ function App() {
           custom={1}
           {...sectionMotion}
         >
-          <p className="map-eyebrow">Invitation</p>
-          <h2>초대합니다</h2>
-          <p className="message-poem">
-            <span className="accent-initial">무</span>르익은 사랑 속에서
-            <br />
-            <span className="accent-initial">민</span>들레 홀씨처럼 인연으로 만난 두 사람
-            <br />
-            <span className="accent-initial">소</span>중한 마음이 하나 되어
-            <br />
-            <span className="accent-initial">연</span>인에서 부부로, 평생을 함께 걸어가려 합니다.
-            <br />
-            귀한 걸음으로 이 자리를 빛내 주신다면
-            <br />
-            더 없는 기쁨으로 오래도록 간직하겠습니다.
-          </p>
+          <RevealText as="p" className="map-eyebrow" lines={['Invitation']} active={Boolean(revealedSections[1])} />
+          <RevealText as="h2" className="section-title" lines={['초대합니다']} active={Boolean(revealedSections[1])} />
+          <RevealText
+            as="p"
+            className="message-poem"
+            lines={[
+              <><span className="accent-initial">무</span>르익은 사랑 속에서</>,
+              <><span className="accent-initial">민</span>들레 홀씨처럼 인연으로 만난 두 사람</>,
+              <><span className="accent-initial">소</span>중한 마음이 하나 되어</>,
+              <><span className="accent-initial">연</span>인에서 부부로, 평생을 함께 걸어가려 합니다.</>,
+              '귀한 걸음으로 이 자리를 빛내 주신다면',
+              '더 없는 기쁨으로 오래도록 간직하겠습니다.',
+            ]}
+            baseDelay={0.08}
+            active={Boolean(revealedSections[1])}
+          />
           <div className="people">
             <div className="message-emblem" aria-hidden="true">
               <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -834,8 +992,13 @@ function App() {
           custom={2}
           {...sectionMotion}
         >
-          <p className="map-eyebrow">Wedding Day</p>
-          <h2>2026. 06. 20. 토요일 오전 11시</h2>
+          <RevealText as="p" className="map-eyebrow" lines={['Wedding Day']} active={Boolean(revealedSections[2])} />
+          <RevealText
+            as="h2"
+            className="section-title"
+            lines={['2026. 06. 20. 토요일 오전 11시']}
+            active={Boolean(revealedSections[2])}
+          />
           <div className="calendar-wrap">
             <DayPicker
               mode="single"
@@ -880,9 +1043,16 @@ function App() {
                 <strong>{countdown.seconds}</strong>
               </div>
             </div>
-            <p className="count-copy">
-              류무민 <span>&#9829;</span> 이소연의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
-            </p>
+            <RevealText
+              as="p"
+              className="count-copy"
+              lines={[
+                <>
+                  류무민 <span>&#9829;</span> 이소연의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
+                </>,
+              ]}
+              active={Boolean(revealedSections[2])}
+            />
           </div>
         </motion.section>
 
@@ -892,9 +1062,14 @@ function App() {
           custom={3}
           {...sectionMotion}
         >
-          <p className="map-eyebrow">Location</p>
-          <h2>오시는 길</h2>
-          <p className="map-venue">월드컵컨벤션 2F 임페리얼볼룸</p>
+          <RevealText as="p" className="map-eyebrow" lines={['Location']} active={Boolean(revealedSections[3])} />
+          <RevealText as="h2" className="section-title" lines={['오시는 길']} active={Boolean(revealedSections[3])} />
+          <RevealText
+            as="p"
+            className="map-venue"
+            lines={['월드컵컨벤션 2F 임페리얼볼룸']}
+            active={Boolean(revealedSections[3])}
+          />
           <div className="map-address-row">
             <button type="button" className="copy-address-btn" onClick={handleCopyAddress} aria-label="주소 복사">
               <svg
@@ -1001,7 +1176,7 @@ function App() {
               카카오맵
             </a>
           </div>
-          <div className="transport-guide">
+          <div ref={transportGuideRef} className="transport-guide">
             <div className="transport-item">
               <h3 className="transport-head">
                 <svg
@@ -1026,10 +1201,26 @@ function App() {
                 </svg>
                 <span>버스</span>
               </h3>
-              <p className="point">월드컵경기장 서측 문화비축기지 정류장 하차 도보 3분</p>
-              <p>간선: 571, 710, 760</p>
-              <p>지선: 7019, 7715, 8777</p>
-              <p>광역: 9711</p>
+              <RevealText
+                as="p"
+                className="point"
+                lines={['월드컵경기장 서측 문화비축기지 정류장 하차 도보 3분']}
+                baseDelay={0.05}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['간선: 571, 710, 760']}
+                baseDelay={0.1}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['지선: 7019, 7715, 8777']}
+                baseDelay={0.15}
+                active={transportGuideVisible}
+              />
+              <RevealText as="p" lines={['광역: 9711']} baseDelay={0.2} active={transportGuideVisible} />
             </div>
 
             <div className="transport-item">
@@ -1056,9 +1247,25 @@ function App() {
                 </svg>
                 <span>지하철</span>
               </h3>
-              <p className="point">6호선 월드컵경기장역 2번 출구 도보 3분 (200m)</p>
-              <p>월드컵경기장역 2번 출구에서 경기장 서측(W) 방향</p>
-              <p>환승: 2호선 합정, 3호선 불광·약수, 4호선 삼각지, 5호선 공덕</p>
+              <RevealText
+                as="p"
+                className="point"
+                lines={['6호선 월드컵경기장역 2번 출구 도보 3분 (200m)']}
+                baseDelay={0.24}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['월드컵경기장역 2번 출구에서 경기장 서측(W) 방향']}
+                baseDelay={0.29}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['환승: 2호선 합정, 3호선 불광·약수, 4호선 삼각지, 5호선 공덕']}
+                baseDelay={0.34}
+                active={transportGuideVisible}
+              />
             </div>
 
             <div className="transport-item">
@@ -1083,9 +1290,25 @@ function App() {
                 </svg>
                 <span>자동차</span>
               </h3>
-              <p className="point">월드컵경기장 서문 진입 후 서측 1,2 주차장 이용</p>
-              <p>주차 접수대 등록 후 출차 (90분 무료)</p>
-              <p>외부 주차 2시간 30분 무료 · 발렛파킹 무료</p>
+              <RevealText
+                as="p"
+                className="point"
+                lines={['월드컵경기장 서문 진입 후 서측 1,2 주차장 이용']}
+                baseDelay={0.38}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['주차 접수대 등록 후 출차 (90분 무료)']}
+                baseDelay={0.43}
+                active={transportGuideVisible}
+              />
+              <RevealText
+                as="p"
+                lines={['외부 주차 2시간 30분 무료 · 발렛파킹 무료']}
+                baseDelay={0.48}
+                active={transportGuideVisible}
+              />
             </div>
           </div>
         </motion.section>
@@ -1098,14 +1321,15 @@ function App() {
         >
           <p className="map-eyebrow">Gallery</p>
           <h2>갤러리</h2>
-          <div className="grid">
-            {galleryImages.map((image, idx) => (
+          <div className={`grid gallery-grid ${galleryExpanded ? 'is-expanded' : ''}`}>
+            {(galleryExpanded ? galleryImages : galleryImages.slice(0, galleryPreviewCount)).map((image, idx) => (
               <button
                 key={image.full}
                 type="button"
                 className="gallery-item"
                 onClick={() => {
-                  setLightboxIndex(idx);
+                  const sourceIndex = galleryImages.findIndex((entry) => entry.full === image.full);
+                  setLightboxIndex(sourceIndex);
                   setLightboxOpen(true);
                 }}
               >
@@ -1113,6 +1337,15 @@ function App() {
               </button>
             ))}
           </div>
+          {galleryImages.length > galleryPreviewCount && (
+            <button
+              type="button"
+              className="gallery-more-btn"
+              onClick={() => setGalleryExpanded((prev) => !prev)}
+            >
+              {galleryExpanded ? '접기' : '더보기'}
+            </button>
+          )}
         </motion.section>
 
         <motion.section
@@ -1123,11 +1356,12 @@ function App() {
         >
           <p className="map-eyebrow">With Heart</p>
           <h2>마음 전하실 곳</h2>
-          <p>
-            참석이 어려우신 분들을 위해 기재했습니다.
-            <br />
-            너그러운 마음으로 양해 부탁드립니다.
-          </p>
+          <RevealText
+            as="p"
+            lines={['참석이 어려우신 분들을 위해 기재했습니다.', '너그러운 마음으로 양해 부탁드립니다.']}
+            baseDelay={0.08}
+            active={Boolean(revealedSections[5])}
+          />
           <div className="transfer-wrap">
             {transferGroups.map((group) => {
               const isOpen = Boolean(openTransferMap[group.key]);
@@ -1192,17 +1426,20 @@ function App() {
         >
           <p className="map-eyebrow">Guestbook</p>
           <h2>방명록</h2>
-          <button type="button" className="guestbook-write-btn" onClick={() => setGuestbookModalOpen(true)}>
-            작성하기
-          </button>
+          <RevealText
+            as="p"
+            className="guestbook-note"
+            lines={['저희 둘에게 따뜻한 방명록을 남겨주세요']}
+            baseDelay={0.08}
+            active={Boolean(revealedSections[6])}
+          />
           <div className="guestbook-list">
             {guestbookLoading ? (
               <p className="guestbook-empty">불러오는 중...</p>
             ) : guestbookItems.length ? (
-              guestbookItems.map((item) => (
+              guestbookItems.slice(0, 3).map((item) => (
                 <article key={item.id} className="guestbook-item">
-                  <header>
-                    <strong>from. {item.name}</strong>
+                  <div className="guestbook-item-top">
                     <button
                       type="button"
                       className="guestbook-delete-btn"
@@ -1211,15 +1448,26 @@ function App() {
                     >
                       ×
                     </button>
-                  </header>
+                  </div>
                   <p>{item.message}</p>
-                  <span className="guestbook-date">{formatGuestbookDate(item.created_at)}</span>
+                  <div className="guestbook-item-meta">
+                    <strong>From {item.name}</strong>
+                    <span className="guestbook-date">{formatGuestbookDate(item.created_at)}</span>
+                  </div>
                 </article>
               ))
             ) : (
               <p className="guestbook-empty">첫 축하 메시지를 남겨 주세요.</p>
             )}
           </div>
+          {!guestbookLoading && guestbookItems.length > 3 && (
+            <button type="button" className="guestbook-more-btn" onClick={() => setGuestbookViewerOpen(true)}>
+              더보기
+            </button>
+          )}
+          <button type="button" className="guestbook-write-btn" onClick={openGuestbookModal}>
+            작성하기
+          </button>
         </motion.footer>
 
         <motion.footer
@@ -1268,11 +1516,12 @@ function App() {
         <div className="guestbook-modal-overlay" role="dialog" aria-modal="true" aria-label="방명록 작성">
           <div className="guestbook-modal">
             <div className="guestbook-modal-head">
-              <h3>방명록 작성</h3>
+              <h3>축하 메시지 작성하기</h3>
               <button type="button" onClick={() => setGuestbookModalOpen(false)} aria-label="닫기">
                 ×
               </button>
             </div>
+            <p className="guestbook-modal-subtitle">저희 둘의 결혼을 함께 축하해 주세요</p>
             <form
               className="guestbook-modal-form"
               onSubmit={async (e) => {
@@ -1283,32 +1532,38 @@ function App() {
               }}
             >
               <label>
-                작성자 성함 <span>*</span>
+                <span className="guestbook-sr-only">
+                  작성자 성함 <span>*</span>
+                </span>
                 <input
                   type="text"
                   value={guestbookName}
                   onChange={(e) => setGuestbookName(e.target.value)}
-                  placeholder="예: 홍길동"
+                  placeholder="성함을 남겨주세요"
                   maxLength={20}
                 />
               </label>
               <label>
-                비밀번호 <span>*</span>
+                <span className="guestbook-sr-only">
+                  비밀번호 <span>*</span>
+                </span>
                 <input
                   type="password"
                   value={guestbookPassword}
                   onChange={(e) => setGuestbookPassword(e.target.value)}
-                  placeholder="방명록을 삭제할 때 사용됩니다"
+                  placeholder="비밀번호를 입력해 주세요"
                   maxLength={20}
                 />
               </label>
               <label>
-                방명록 내용 <span>*</span>
+                <span className="guestbook-sr-only">
+                  방명록 내용 <span>*</span>
+                </span>
                 <textarea
                   value={guestbookMessage}
                   onChange={(e) => setGuestbookMessage(e.target.value)}
-                  placeholder="신랑 신부의 결혼을 축하해주세요"
-                  maxLength={300}
+                  placeholder="200자 이내로 작성해 주세요"
+                  maxLength={200}
                   rows={5}
                 />
               </label>
@@ -1317,9 +1572,46 @@ function App() {
                 className={canSubmitGuestbook ? 'is-ready' : ''}
                 disabled={guestbookSubmitting || !canSubmitGuestbook}
               >
-                {guestbookSubmitting ? '등록 중...' : '확인'}
+                {guestbookSubmitting ? '등록 중...' : '작성 완료'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {guestbookViewerOpen && (
+        <div className="guestbook-viewer-overlay" role="dialog" aria-modal="true" aria-label="전체 방명록">
+          <div className="guestbook-viewer">
+            <div className="guestbook-viewer-head">
+              <h3>방명록</h3>
+              <button type="button" onClick={() => setGuestbookViewerOpen(false)} aria-label="방명록 닫기">
+                ×
+              </button>
+            </div>
+            <div className="guestbook-viewer-list">
+              {guestbookItems.map((item) => (
+                <article key={`viewer-${item.id}`} className="guestbook-item">
+                  <div className="guestbook-item-top">
+                    <button
+                      type="button"
+                      className="guestbook-delete-btn"
+                      onClick={() => {
+                        setGuestbookViewerOpen(false);
+                        openDeleteModal(item.id);
+                      }}
+                      aria-label="방명록 삭제"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <p>{item.message}</p>
+                  <div className="guestbook-item-meta">
+                    <strong>From {item.name}</strong>
+                    <span className="guestbook-date">{formatGuestbookDate(item.created_at)}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -1341,9 +1633,12 @@ function App() {
                 ×
               </button>
             </div>
+            <p className="guestbook-modal-subtitle">메시지를 남길 때 입력한 비밀번호를 입력해 주세요</p>
             <form className="guestbook-modal-form" onSubmit={handleDeleteGuestbook}>
               <label>
-                삭제 비밀번호 <span>*</span>
+                <span className="guestbook-sr-only">
+                  삭제 비밀번호 <span>*</span>
+                </span>
                 <input
                   type="password"
                   value={deletePassword}
@@ -1363,6 +1658,28 @@ function App() {
           </div>
         </div>
       )}
+
+      <button
+        type="button"
+        className={`scroll-top-btn ${showScrollTop ? 'is-visible' : ''}`}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="맨 위로 이동"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M6 15l6-6 6 6" />
+        </svg>
+      </button>
 
       {toastMessage && <div className="copy-toast">{toastMessage}</div>}
     </div>
