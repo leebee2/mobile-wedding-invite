@@ -4,7 +4,7 @@ import { RevealText } from '../shared/ui';
 export default function InvitationSection({ activeSection, revealed, sectionMotion }) {
   return (
     <motion.section
-      className={`section message ${activeSection === 1 ? 'is-current' : 'is-dimmed'}`}
+      className={`section section-screen message ${activeSection === 1 ? 'is-current' : 'is-dimmed'}`}
       data-section-index="1"
       custom={1}
       {...sectionMotion}

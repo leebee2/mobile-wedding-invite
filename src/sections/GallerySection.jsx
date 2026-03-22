@@ -17,7 +17,7 @@ export default function GallerySection({
   return (
     <>
       <motion.section
-        className={`section gallery ${activeSection === 4 ? 'is-current' : 'is-dimmed'}`}
+        className={`section section-flow gallery ${activeSection === 4 ? 'is-current' : 'is-dimmed'}`}
         data-section-index="4"
         custom={5}
         {...sectionMotion}

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { venuePosition } from '../config';
 import { RevealText } from '../shared/ui';
 
 export default function LocationSection({
@@ -8,13 +9,13 @@ export default function LocationSection({
   sectionMotion,
   setToastMessage,
   kakaoAppKey,
-  mapError,
 }) {
+  const [mapError, setMapError] = useState(false);
   const [transportGuideVisible, setTransportGuideVisible] = useState(false);
   const transportGuideRef = useRef(null);
 
   const handleCopyAddress = async () => {
-    const address = '서울 마포구 월드컵로 240 2층 (성산동 서울월드컵경기장 서측)';
+    const address = '월드컵컨벤션 예식장, 서울 마포구 월드컵로 240 2층 (성산동 서울월드컵경기장 서측)';
     try {
       await navigator.clipboard.writeText(address);
       setToastMessage('주소가 복사되었습니다.');
@@ -23,6 +24,64 @@ export default function LocationSection({
       setToastMessage('');
     }
   };
+
+  useEffect(() => {
+    const mapContainer = document.getElementById('kakao-map');
+    if (!kakaoAppKey || !mapContainer) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const drawMap = () => {
+      if (cancelled || !window.kakao?.maps || !mapContainer) {
+        return;
+      }
+      const center = new window.kakao.maps.LatLng(venuePosition.lat, venuePosition.lng);
+      const map = new window.kakao.maps.Map(mapContainer, { center, level: 3 });
+      new window.kakao.maps.Marker({ position: center, map });
+      setMapError(false);
+    };
+
+    if (window.kakao?.maps) {
+      window.kakao.maps.load(drawMap);
+      return;
+    }
+
+    const existingScript = document.getElementById('kakao-map-sdk');
+    const handleLoad = () => {
+      if (!cancelled && window.kakao?.maps) {
+        window.kakao.maps.load(drawMap);
+      }
+    };
+    const handleError = () => {
+      if (!cancelled) {
+        setMapError(true);
+      }
+    };
+
+    if (existingScript) {
+      existingScript.addEventListener('load', handleLoad);
+      existingScript.addEventListener('error', handleError);
+    } else {
+      const script = document.createElement('script');
+      script.id = 'kakao-map-sdk';
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAppKey}&autoload=false`;
+      script.async = true;
+      script.addEventListener('load', handleLoad);
+      script.addEventListener('error', handleError);
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      cancelled = true;
+      const script = document.getElementById('kakao-map-sdk');
+      if (script) {
+        script.removeEventListener('load', handleLoad);
+        script.removeEventListener('error', handleError);
+      }
+    };
+  }, [kakaoAppKey]);
 
   useEffect(() => {
     if (!transportGuideRef.current || transportGuideVisible) {
@@ -46,7 +105,7 @@ export default function LocationSection({
 
   return (
     <motion.section
-      className={`section map ${activeSection === 3 ? 'is-current' : 'is-dimmed'}`}
+      className={`section section-flow map ${activeSection === 3 ? 'is-current' : 'is-dimmed'}`}
       data-section-index="3"
       custom={3}
       {...sectionMotion}
@@ -77,7 +136,7 @@ export default function LocationSection({
         )}
       </div>
       <div className="actions">
-        <a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9B%94%EB%93%9C%EC%BB%B5%EB%A1%9C%20240" target="_blank" rel="noreferrer">
+        <a href="https://map.naver.com/p/search/%EC%9B%94%EB%93%9C%EC%BB%B5%EC%BB%A8%EB%B2%A4%EC%85%98%20%EC%98%88%EC%8B%9D%EC%9E%A5" target="_blank" rel="noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="action-icon" aria-hidden="true">
             <rect width="24" height="24" rx="6" fill="#FFFFFF" />
             <path d="M7 17H17C18.1 17 19 16.1 19 15V15H5V15C5 16.1 5.9 17 7 17Z" fill="#4285F4" />
@@ -86,7 +145,7 @@ export default function LocationSection({
           </svg>
           네이버지도
         </a>
-        <a href="https://www.tmap.co.kr/tmap2/mobile/route.jsp?name=%EC%9B%94%EB%93%9C%EC%BB%B5%EC%BB%A8%EB%B2%A4%EC%85%98&lon=126.89719&lat=37.56826" target="_blank" rel="noreferrer">
+        <a href="https://www.tmap.co.kr/tmap2/mobile/route.jsp?name=%EC%9B%94%EB%93%9C%EC%BB%B5%EC%BB%A8%EB%B2%A4%EC%85%98%20%EC%98%88%EC%8B%9D%EC%9E%A5&lon=126.89719&lat=37.56826" target="_blank" rel="noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="action-icon" aria-hidden="true">
             <rect width="24" height="24" rx="6" fill="url(#tmap_gradient)" />
             <path d="M12 7.5V17M12 7.5H8.5M12 7.5H15.5" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -100,7 +159,7 @@ export default function LocationSection({
           </svg>
           티맵
         </a>
-        <a href="https://map.kakao.com/link/search/%EC%84%9C%EC%9A%B8%20%EB%A7%88%ED%8F%AC%EA%B5%AC%20%EC%9B%94%EB%93%9C%EC%BB%B5%EB%A1%9C%20240" target="_blank" rel="noreferrer">
+        <a href="https://map.kakao.com/link/search/%EC%9B%94%EB%93%9C%EC%BB%B5%EC%BB%A8%EB%B2%A4%EC%85%98%20%EC%98%88%EC%8B%9D%EC%9E%A5" target="_blank" rel="noreferrer">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="action-icon" aria-hidden="true">
             <rect width="24" height="24" rx="6" fill="#FEE500" />
             <path d="M12 18C12 18 17 13.5 17 9.5C17 6.7 14.8 4.5 12 4.5C9.2 4.5 7 6.7 7 9.5C7 13.5 12 18 12 18Z" fill="#1E69FE" />

@@ -20,7 +20,6 @@ import {
   kakaoAppKey,
   supabase,
   transferGroups,
-  venuePosition,
   weddingDate,
   weddingDateTime,
   sectionMotion,
@@ -31,7 +30,6 @@ import { usePreventImageActions, useScrollTopVisibility, useSectionTracking } fr
 function App() {
   const countdown = useCountdown(weddingDateTime);
   const { activeSection, revealedSections } = useSectionTracking();
-  const [mapError, setMapError] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [bgmPlaying, setBgmPlaying] = useState(false);
   const showScrollTop = useScrollTopVisibility();
@@ -196,64 +194,6 @@ function App() {
     setBgmPlaying(false);
   };
 
-  useEffect(() => {
-    const mapContainer = document.getElementById('kakao-map');
-    if (!kakaoAppKey || !mapContainer) {
-      return;
-    }
-
-    let cancelled = false;
-
-    const drawMap = () => {
-      if (cancelled || !window.kakao?.maps || !mapContainer) {
-        return;
-      }
-      const center = new window.kakao.maps.LatLng(venuePosition.lat, venuePosition.lng);
-      const map = new window.kakao.maps.Map(mapContainer, { center, level: 3 });
-      new window.kakao.maps.Marker({ position: center, map });
-      setMapError(false);
-    };
-
-    if (window.kakao?.maps) {
-      window.kakao.maps.load(drawMap);
-      return;
-    }
-
-    const existingScript = document.getElementById('kakao-map-sdk');
-    const handleLoad = () => {
-      if (!cancelled && window.kakao?.maps) {
-        window.kakao.maps.load(drawMap);
-      }
-    };
-    const handleError = () => {
-      if (!cancelled) {
-        setMapError(true);
-      }
-    };
-
-    if (existingScript) {
-      existingScript.addEventListener('load', handleLoad);
-      existingScript.addEventListener('error', handleError);
-    } else {
-      const script = document.createElement('script');
-      script.id = 'kakao-map-sdk';
-      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAppKey}&autoload=false`;
-      script.async = true;
-      script.addEventListener('load', handleLoad);
-      script.addEventListener('error', handleError);
-      document.head.appendChild(script);
-    }
-
-    return () => {
-      cancelled = true;
-      const script = document.getElementById('kakao-map-sdk');
-      if (script) {
-        script.removeEventListener('load', handleLoad);
-        script.removeEventListener('error', handleError);
-      }
-    };
-  }, [kakaoAppKey]);
-
   return (
     <div className="invite-shell">
       <audio
@@ -278,7 +218,6 @@ function App() {
           sectionMotion={sectionMotion}
           setToastMessage={setToastMessage}
           kakaoAppKey={kakaoAppKey}
-          mapError={mapError}
         />
         <GallerySection
           activeSection={activeSection}
@@ -300,12 +239,7 @@ function App() {
           supabase={supabase}
           setToastMessage={setToastMessage}
         />
-        <ShareSection
-          activeSection={activeSection}
-          sectionMotion={sectionMotion}
-          kakaoAppKey={kakaoAppKey}
-          setToastMessage={setToastMessage}
-        />
+        <ShareSection activeSection={activeSection} sectionMotion={sectionMotion} kakaoAppKey={kakaoAppKey} setToastMessage={setToastMessage} />
       </div>
 
       <button

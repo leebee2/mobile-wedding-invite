@@ -6,7 +6,7 @@ export default function ShareSection({ activeSection, sectionMotion, kakaoAppKey
 
   return (
     <motion.footer
-      className={`section footer ${activeSection === 7 ? 'is-current' : 'is-dimmed'}`}
+      className={`section section-screen footer ${activeSection === 7 ? 'is-current' : 'is-dimmed'}`}
       data-section-index="7"
       custom={8}
       {...sectionMotion}

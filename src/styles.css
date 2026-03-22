@@ -31,31 +31,34 @@
   --body-muted: #797570;
   --line: #ece3d8;
   --accent: #7f9175;
-  --font-ko: 'Nanum Bujangnim', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-ko-compact: 'Nanum Bujangnim', 'Pretendard', sans-serif;
+  --font-ko: 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-ko-compact: 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-button: var(--font-ko-compact);
-  --button-size: 1.7rem;
+  --button-size: 1rem;
   --button-weight: 500;
   --button-line-height: 1.15;
-  --eyebrow-size: 1.08rem;
-  --title-size: 1.82rem;
-  --body-size: 1.4rem;
-  --meta-size: 1.02rem;
-  --caption-size: 0.92rem;
-  --transfer-label-size: 1.32rem;
-  --transfer-name-size: 1.56rem;
-  --transfer-account-size: 1.52rem;
-  --modal-title-size: 1.72rem;
-  --modal-subtitle-size: 1.28rem;
-  --modal-input-size: 1.3rem;
-  --trigger-size: 1.18rem;
+  --eyebrow-size: 0.86rem;
+  --title-size: 2.19rem;
+  --body-size: 1.12rem;
+  --poem-size: 1.5rem;
+  --family-line-size: 1rem;
+  --transport-title-size: 1rem;
+  --meta-size: 0.82rem;
+  --caption-size: 0.74rem;
+  --transfer-label-size: 1.06rem;
+  --transfer-name-size: 1rem;
+  --transfer-account-size: 1.22rem;
+  --modal-title-size: 1.38rem;
+  --modal-subtitle-size: 1.02rem;
+  --modal-input-size: 1.04rem;
+  --trigger-size: 0.94rem;
   --space-1: 0.5rem;
   --space-2: 0.75rem;
   --space-3: 1.125rem;
   --space-4: 1.5rem;
   --space-5: 2rem;
-  --section-gap: 8.5rem;
-  --section-gap-mobile: 13rem;
+  --section-gap: 6rem;
+  --section-gap-mobile: 6.5rem;
   --yarl__color_backdrop: rgba(255, 254, 253, 1);
   --yarl__color_button: #5c6f59;
 }
@@ -87,10 +90,11 @@ body {
   line-height: var(--button-line-height);
 }
 
+
 h2,
 .hero-date,
 .hero-place {
-  font-family: var(--font-ko);
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .invite-shell {
@@ -227,6 +231,10 @@ h2,
   margin-top: var(--section-gap);
 }
 
+.hero + .message {
+  margin-top: 0;
+}
+
 .section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -247,7 +255,7 @@ h2,
   position: relative;
   min-height: 100svh;
   text-align: center;
-  padding: 24px 6px 32px;
+  padding: 0 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -434,6 +442,18 @@ h2,
   background: linear-gradient(to bottom, rgba(78, 93, 79, 0.14), rgba(255, 249, 239, 0.08));
 }
 
+.hero-frame::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  background: linear-gradient(to top, rgba(35, 42, 36, 0.38), rgba(35, 42, 36, 0));
+  z-index: 1;
+  pointer-events: none;
+}
+
 .hero-image {
   width: 100%;
   height: 100%;
@@ -483,29 +503,41 @@ h2,
   justify-items: center;
 }
 
+.hero-paper-bottom-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.4rem;
+  z-index: 2;
+  padding: 0 1.4rem;
+}
+
 .hero-arch-names {
-  font-size: clamp(2.35rem, 8.4vw, 3.1rem);
-  font-family: 'Nanum Bujangnim', 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(1.88rem, 6.7vw, 2.48rem);
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   letter-spacing: 0.02em;
   font-weight: 600;
+  color: #f8f5ef;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
 }
 
 .hero-arch-date {
   font-size: clamp(1.5rem, 5.2vw, 2rem);
   letter-spacing: 0.12em;
-  color: var(--body-muted);
-  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  color: rgba(248, 245, 239, 0.94);
+  font-family: 'Cormorant Garamond', serif;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 }
 
 .hero-arch-names-line .reveal-line-inner {
-  font-size: clamp(1.28rem, 4.9vw, 1.7rem) !important;
+  font-size: clamp(1.02rem, 3.92vw, 1.36rem) !important;
   line-height: 1.16 !important;
 }
 
 .hero-arch-date-line .reveal-line-inner {
-  font-size: clamp(0.88rem, 3.1vw, 1.12rem) !important;
+  font-size: clamp(0.76rem, 2.8vw, 0.98rem) !important;
   line-height: 1.16 !important;
 }
 
@@ -522,6 +554,15 @@ h2 {
 
 .section-title .reveal-line + .reveal-line {
   margin-top: 0.12em;
+}
+
+.calendar-subtitle {
+  margin: -0.4rem 0 var(--space-3);
+  font-size: var(--body-size);
+  line-height: 1.6;
+  color: var(--body-muted);
+  text-align: center;
+  font-family: var(--font-ko);
 }
 
 .message,
@@ -542,6 +583,8 @@ h2 {
 .message .message-poem {
   line-height: 1.95;
   margin-bottom: var(--space-4);
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: var(--poem-size);
 }
 
 .message-poem .reveal-line + .reveal-line {
@@ -568,7 +611,7 @@ h2 {
 }
 
 .message-emblem {
-  margin: 4px auto var(--space-2);
+  margin: 1rem auto var(--space-2);
   width: 72px;
   color: #8f9d86;
   line-height: 0;
@@ -650,7 +693,7 @@ h2 {
 .family-line {
   margin: 6px 0 4px;
   color: var(--muted);
-  font-size: var(--body-size);
+  font-size: 1rem !important;
   line-height: 1.4;
 }
 
@@ -772,7 +815,7 @@ h2 {
 
 .count-item span {
   display: block;
-  font-size: 0.88rem;
+  font-size: 0.66rem;
   color: var(--body-muted);
   letter-spacing: 0.04em;
 }
@@ -780,7 +823,7 @@ h2 {
 .count-item strong {
   display: block;
   margin-top: 10px;
-  font-size: clamp(1.22rem, 4.8vw, 1.62rem);
+  font-size: clamp(0.9rem, 3.6vw, 1.2rem);
   color: #486556;
   line-height: 1;
 }
@@ -817,8 +860,8 @@ h2 {
 }
 
 .wedding-calendar .rdp-caption_label {
-  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', sans-serif;
-  font-size: 1.9rem;
+  font-family: var(--font-ko);
+  font-size: 1.52rem;
 }
 
 .wedding-calendar .rdp-month_caption {
@@ -1480,7 +1523,7 @@ h2 {
   font-weight: 400;
   line-height: 1.8;
   color: var(--body-text);
-  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-ko);
 }
 
 .map-address {
@@ -1571,6 +1614,7 @@ h2 {
   border-radius: 999px;
   background: rgba(255, 254, 253, 0.9);
   color: var(--text);
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 1rem;
   line-height: 1;
   pointer-events: none;
@@ -1653,11 +1697,11 @@ h2 {
 .transport-item h3 {
   margin: 0 0 12px;
   color: #6d8066;
-  font-size: calc(var(--body-size) + 0.08rem);
+  font-size: var(--transport-title-size);
   line-height: 1.1;
   letter-spacing: 0;
   font-weight: 700;
-  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', sans-serif;
+  font-family: var(--font-ko);
   text-align: left;
 }
 
@@ -1757,7 +1801,6 @@ h2 {
 .intro-copy p,
 .hero-arch-sub,
 .message p,
-.family-line,
 .family-row strong,
 .row a,
 .family-row a,
@@ -1819,7 +1862,7 @@ h2 {
   }
 
   .hero {
-    padding: 22px 0 24px;
+    padding: 0;
   }
 
   .row {

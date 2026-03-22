@@ -38,11 +38,10 @@ export default function GuestbookSection({
     canSubmitDelete,
     formatGuestbookDate,
   } = useGuestbook({ supabase, setToastMessage });
-
   return (
     <>
       <motion.footer
-        className={`section guestbook ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
+        className={`section section-flow guestbook ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
         data-section-index="6"
         custom={7}
         {...sectionMotion}

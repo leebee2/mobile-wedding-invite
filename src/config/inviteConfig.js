@@ -47,7 +47,7 @@ export const galleryImages = galleryFiles.map((file) => ({
 export const galleryPreviewCount = 6;
 export const weddingDate = new Date(2026, 5, 20);
 export const weddingDateTime = new Date('2026-06-20T11:00:00+09:00');
-export const venuePosition = { lat: 37.56826, lng: 126.89719 };
+export const venuePosition = { lat: 37.56842, lng: 126.89615 };
 
 export const transferGroups = [
   {

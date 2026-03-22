@@ -12,13 +12,19 @@ export default function CalendarSection({
 }) {
   return (
     <motion.section
-      className={`section calendar ${activeSection === 2 ? 'is-current' : 'is-dimmed'}`}
+      className={`section section-screen calendar ${activeSection === 2 ? 'is-current' : 'is-dimmed'}`}
       data-section-index="2"
       custom={2}
       {...sectionMotion}
     >
       <RevealText as="p" className="map-eyebrow" lines={['Wedding Day']} active={revealed} />
-      <RevealText as="h2" className="section-title" lines={['2026. 06. 20. 토요일 오전 11시']} active={revealed} />
+      <RevealText
+        as="p"
+        className="calendar-subtitle"
+        lines={['2026. 06. 20. 토요일 오전 11시']}
+        baseDelay={0.06}
+        active={revealed}
+      />
       <div className="calendar-wrap">
         <DayPicker
           mode="single"
@@ -61,7 +67,7 @@ export default function CalendarSection({
           className="count-copy"
           lines={[
             <>
-              류무민 <span>&#9829;</span> 이소연의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
+              무민, 소연의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
             </>,
           ]}
           active={revealed}

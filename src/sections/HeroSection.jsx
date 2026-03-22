@@ -57,16 +57,7 @@ export default function HeroSection({
               active={revealed}
             />
             <img className="hero-image" src={archImage} alt="신랑 신부 메인 사진" />
-          </div>
-          <div className="hero-meta">
-            <RevealText
-              as="div"
-              className="hero-paper-label"
-              lines={['Moomin Ryu and Soyeon Lee']}
-              baseDelay={0.12}
-              active={revealed}
-            />
-            <div className="hero-paper-bottom">
+            <div className="hero-paper-bottom hero-paper-bottom-overlay">
               <RevealText
                 as="div"
                 className="hero-arch-sub hero-arch-names"
@@ -84,6 +75,15 @@ export default function HeroSection({
                 active={revealed}
               />
             </div>
+          </div>
+          <div className="hero-meta">
+            <RevealText
+              as="div"
+              className="hero-paper-label"
+              lines={['Moomin Ryu and Soyeon Lee']}
+              baseDelay={0.12}
+              active={revealed}
+            />
           </div>
         </div>
       </div>
