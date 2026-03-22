@@ -71,6 +71,7 @@ export function GuestbookCreateModal({
               rows={5}
             />
           </label>
+          <p className="guestbook-char-count">{guestbookMessage.length} / 200</p>
           <button type="submit" className={canSubmitGuestbook ? 'is-ready' : ''} disabled={guestbookSubmitting || !canSubmitGuestbook}>
             {guestbookSubmitting ? '등록 중...' : '작성 완료'}
           </button>

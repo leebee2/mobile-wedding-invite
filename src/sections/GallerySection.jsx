@@ -36,7 +36,13 @@ export default function GallerySection({
                 setLightboxOpen(true);
               }}
             >
-              <img src={image.thumb} alt={`웨딩 사진 ${idx + 1}`} loading="lazy" decoding="async" />
+              <img
+                src={image.thumb}
+                alt={`웨딩 사진 ${idx + 1}`}
+                loading="lazy"
+                fetchPriority="low"
+                decoding="async"
+              />
             </button>
           ))}
         </div>

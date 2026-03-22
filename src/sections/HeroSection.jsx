@@ -56,7 +56,14 @@ export default function HeroSection({
               lines={['Our', 'Wedding Day']}
               active={revealed}
             />
-            <img className="hero-image" src={archImage} alt="신랑 신부 메인 사진" />
+            <img
+              className="hero-image"
+              src={archImage}
+              alt="신랑 신부 메인 사진"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
             <div className="hero-paper-bottom hero-paper-bottom-overlay">
               <RevealText
                 as="div"

@@ -87,7 +87,7 @@ export default function useGuestbook({ supabase, setToastMessage }) {
       setGuestbookName('');
       setGuestbookPassword('');
       setGuestbookMessage('');
-      setToastMessage('방명록이 등록되었습니다.');
+      setToastMessage('방명록이 등록되었어요. 감사합니다.');
       window.setTimeout(() => setToastMessage(''), 1800);
       setGuestbookSubmitting(false);
       return true;

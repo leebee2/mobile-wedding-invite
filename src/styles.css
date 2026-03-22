@@ -1259,6 +1259,14 @@ h2 {
   min-height: 150px;
 }
 
+.guestbook-char-count {
+  margin: -4px 2px 4px;
+  text-align: right;
+  color: #b4aea8;
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
 .guestbook-modal-form button[type='submit'] {
   margin-top: 8px;
   border: 0;
