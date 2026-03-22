@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 const introTitleLines = ["We're", 'getting', 'married'];
 const titleText = introTitleLines.join(' ');
+const introVisibleDuration = 5200;
+const introTypingDuration = 4200;
 
 export default function IntroOverlay({ introImages }) {
   const [introDone, setIntroDone] = useState(false);
@@ -52,7 +54,7 @@ export default function IntroOverlay({ introImages }) {
       return;
     }
 
-    const hideTimer = setTimeout(() => setIntroHidden(true), 5200);
+    const hideTimer = setTimeout(() => setIntroHidden(true), introVisibleDuration);
     const doneTimer = setTimeout(() => setIntroDone(true), 6500);
 
     return () => {
@@ -67,13 +69,14 @@ export default function IntroOverlay({ introImages }) {
     }
 
     let idx = 0;
+    const typingInterval = Math.max(70, Math.floor(introTypingDuration / titleText.length));
     const timer = setInterval(() => {
       idx += 1;
       setTypedText(titleText.slice(0, idx));
       if (idx >= titleText.length) {
         clearInterval(timer);
       }
-    }, 95);
+    }, typingInterval);
 
     return () => clearInterval(timer);
   }, [introHidden, introAssetsReady]);

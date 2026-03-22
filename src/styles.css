@@ -132,12 +132,12 @@ h2,
 
 .intro-image-1 {
   opacity: 1;
-  animation: zoomInFirst 4.8s ease-out forwards;
+  animation: zoomInFirst 5.2s ease-out forwards;
 }
 
 .intro-image-2 {
   opacity: 0;
-  animation: crossFadeSecond 4.8s ease-out forwards;
+  animation: crossFadeSecond 5.2s ease-out forwards;
 }
 
 .intro-copy {
@@ -1827,7 +1827,7 @@ h2 {
     opacity: 0;
     transform: scale(1);
   }
-  40% {
+  50% {
     opacity: 0;
   }
   100% {
