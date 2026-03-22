@@ -1855,6 +1855,25 @@ h2 {
   }
 }
 
+@media (max-width: 768px) {
+  .invite-page {
+    scroll-snap-type: y proximity;
+  }
+
+  .section {
+    scroll-snap-stop: normal;
+  }
+
+  .section.is-current,
+  .section.is-dimmed {
+    transform: none;
+  }
+
+  .section.is-dimmed {
+    opacity: 0.55;
+  }
+}
+
 @media (max-width: 420px) {
   .invite-page {
     padding: 0 12px 32px;
@@ -1866,7 +1885,7 @@ h2 {
 
   .section.is-dimmed {
     opacity: 0.3;
-    transform: scale(0.99);
+    transform: none;
   }
 
   .hero {
@@ -1905,11 +1924,6 @@ h2 {
 
   .guestbook + .footer {
     margin-top: 7.5rem;
-  }
-
-  .guestbook-modal-overlay {
-    place-items: start center;
-    padding: 10vh 18px 24px;
   }
 
   .typewriter {
