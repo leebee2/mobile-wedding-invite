@@ -1160,7 +1160,7 @@ h2 {
 
 .guestbook-modal {
   width: min(420px, 100%);
-  background: #fffefd;
+  background: #fdf9f1;
   border-radius: 14px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
   padding: 26px 24px 22px;
@@ -1321,7 +1321,7 @@ h2 {
 }
 
 .transfer-card {
-  background: #fffdf8;
+  background: #fdf9f1;
   border-radius: 12px;
   padding: 14px 14px 12px;
 }
@@ -1489,6 +1489,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
   text-decoration: none;
+  box-shadow: 0 10px 24px rgba(67, 56, 44, 0.08);
 }
 
 .share-btn svg {
@@ -1502,7 +1503,7 @@ h2 {
 }
 
 .share-kakao {
-  background: #eef4ef;
+  background: #eef4e7;
   color: #5c6f59;
 }
 
@@ -1510,6 +1511,7 @@ h2 {
   background: #7f9175;
   color: #fffaf0;
   cursor: pointer;
+  box-shadow: 0 12px 26px rgba(67, 56, 44, 0.14);
 }
 
 .map {
