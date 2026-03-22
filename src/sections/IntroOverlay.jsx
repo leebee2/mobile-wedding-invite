@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 const introTitleLines = ["We're", 'getting', 'married'];
 const titleText = introTitleLines.join(' ');
-const introVisibleDuration = 5200;
-const introTypingDuration = 4200;
+const introVisibleDuration = 4600;
+const introTypingDuration = 3700;
 
 export default function IntroOverlay({ introImages }) {
   const [introDone, setIntroDone] = useState(false);
@@ -55,7 +55,7 @@ export default function IntroOverlay({ introImages }) {
     }
 
     const hideTimer = setTimeout(() => setIntroHidden(true), introVisibleDuration);
-    const doneTimer = setTimeout(() => setIntroDone(true), 6500);
+    const doneTimer = setTimeout(() => setIntroDone(true), 5900);
 
     return () => {
       clearTimeout(hideTimer);

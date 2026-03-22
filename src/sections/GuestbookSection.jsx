@@ -40,7 +40,7 @@ export default function GuestbookSection({
   } = useGuestbook({ supabase, setToastMessage });
   return (
     <>
-      <motion.footer
+      <motion.section
         className={`section section-flow guestbook ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
         data-section-index="6"
         custom={7}
@@ -90,7 +90,7 @@ export default function GuestbookSection({
         <button type="button" className="guestbook-write-btn" onClick={openGuestbookModal}>
           작성하기
         </button>
-      </motion.footer>
+      </motion.section>
 
       <GuestbookCreateModal
         open={guestbookModalOpen}

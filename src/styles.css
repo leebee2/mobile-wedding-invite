@@ -132,12 +132,12 @@ h2,
 
 .intro-image-1 {
   opacity: 1;
-  animation: zoomInFirst 5.2s ease-out forwards;
+  animation: zoomInFirst 4.6s ease-out forwards;
 }
 
 .intro-image-2 {
   opacity: 0;
-  animation: crossFadeSecond 5.2s ease-out forwards;
+  animation: crossFadeSecond 4.6s ease-out forwards;
 }
 
 .intro-copy {
@@ -1038,7 +1038,8 @@ h2 {
   margin: 60px 0 44px;
   text-align: center;
   color: var(--text);
-  font-size: var(--body-size);
+  font-size: 1.5rem;
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.6;
   font-style: italic;
   letter-spacing: 0.01em;
@@ -1047,7 +1048,9 @@ h2 {
 .guestbook-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.46);
+  background: rgba(27, 26, 24, 0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 22000;
   display: grid;
   place-items: center;
@@ -1158,7 +1161,7 @@ h2 {
 .guestbook-modal {
   width: min(420px, 100%);
   background: #fffefd;
-  border-radius: 4px;
+  border-radius: 14px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
   padding: 26px 24px 22px;
 }
@@ -1466,6 +1469,10 @@ h2 {
 
 .footer {
   padding-bottom: 8px;
+}
+
+.guestbook + .footer {
+  margin-top: 6rem;
 }
 
 .share-actions {
@@ -1782,19 +1789,18 @@ h2 {
 
 .copy-toast {
   position: fixed;
-  left: 50%;
+  left: 16px;
+  right: 16px;
   bottom: 18px;
-  transform: translateX(-50%);
+  transform: none;
   z-index: 30000;
-  background: rgba(92, 111, 89, 0.94);
+  background: rgba(137, 164, 131, 0.96);
   color: #fffaf0;
-  padding: 11px 18px;
+  padding: 11px 28px;
   border-radius: 12px;
   font-size: 0.86rem;
   line-height: 1;
   white-space: nowrap;
-  min-width: 260px;
-  max-width: calc(100vw - 20px);
   text-align: center;
 }
 
@@ -1893,6 +1899,15 @@ h2 {
   .hero-arch-title {
     top: 16px;
     font-size: clamp(1.95rem, 9vw, 2.5rem);
+  }
+
+  .guestbook + .footer {
+    margin-top: 7.5rem;
+  }
+
+  .guestbook-modal-overlay {
+    place-items: start center;
+    padding: 10vh 18px 24px;
   }
 
   .typewriter {

@@ -1,3 +1,12 @@
+import { createPortal } from 'react-dom';
+
+function renderModal(content) {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+  return createPortal(content, document.body);
+}
+
 export function GuestbookCreateModal({
   open,
   onClose,
@@ -15,7 +24,7 @@ export function GuestbookCreateModal({
     return null;
   }
 
-  return (
+  return renderModal(
     <div className="guestbook-modal-overlay" role="dialog" aria-modal="true" aria-label="방명록 작성">
       <div className="guestbook-modal">
         <div className="guestbook-modal-head">
@@ -82,7 +91,7 @@ export function GuestbookViewerModal({
     return null;
   }
 
-  return (
+  return renderModal(
     <div className="guestbook-viewer-overlay" role="dialog" aria-modal="true" aria-label="전체 방명록">
       <div className="guestbook-viewer">
         <div className="guestbook-viewer-head">
@@ -133,7 +142,7 @@ export function GuestbookDeleteModal({
     return null;
   }
 
-  return (
+  return renderModal(
     <div className="guestbook-modal-overlay" role="dialog" aria-modal="true" aria-label="방명록 삭제">
       <div className="guestbook-modal delete-modal">
         <div className="guestbook-modal-head">
