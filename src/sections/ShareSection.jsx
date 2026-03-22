@@ -11,7 +11,6 @@ export default function ShareSection({ activeSection, sectionMotion, kakaoAppKey
       custom={8}
       {...sectionMotion}
     >
-      <p className="share-note">함께 축하해 주셔서 감사합니다.</p>
       <div className="share-actions">
         <button type="button" className="share-btn share-kakao" onClick={handleShareInvite}>
           <span>카카오톡으로 청첩장 전하기</span>
