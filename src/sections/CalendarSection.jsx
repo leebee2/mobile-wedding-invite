@@ -21,7 +21,7 @@ export default function CalendarSection({
       <RevealText
         as="h2"
         className="section-title calendar-title"
-        lines={['2026. 06. 20. 토요일 오전 11시']}
+        lines={['2026. 06. 20.', '토요일 오전 11시']}
         baseDelay={0.06}
         active={revealed}
       />
