@@ -204,6 +204,7 @@ export default function LocationSection({
       </div>
       <div ref={transportGuideRef} className="transport-guide">
         <div className="transport-item">
+          <div className="transport-emblem" aria-hidden="true" />
           <motion.div
             className="transport-head"
             initial={{ opacity: 0, y: '115%' }}
@@ -226,6 +227,7 @@ export default function LocationSection({
           <RevealText as="p" lines={['광역: 9711']} baseDelay={0.2} active={transportGuideVisible} />
         </div>
         <div className="transport-item">
+          <div className="transport-emblem" aria-hidden="true" />
           <motion.div
             className="transport-head"
             initial={{ opacity: 0, y: '115%' }}
@@ -247,6 +249,7 @@ export default function LocationSection({
           <RevealText as="p" lines={['환승: 2호선 합정, 3호선 불광·약수, 4호선 삼각지, 5호선 공덕']} baseDelay={0.34} active={transportGuideVisible} />
         </div>
         <div className="transport-item">
+          <div className="transport-emblem" aria-hidden="true" />
           <motion.div
             className="transport-head"
             initial={{ opacity: 0, y: '115%' }}

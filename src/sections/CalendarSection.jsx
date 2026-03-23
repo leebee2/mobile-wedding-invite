@@ -26,6 +26,7 @@ export default function CalendarSection({
         baseDelay={0.06}
         active={revealed}
       />
+      <div className="calendar-emblem" aria-hidden="true" />
       <div className="calendar-wrap">
         <DayPicker
           mode="single"
@@ -44,6 +45,7 @@ export default function CalendarSection({
           modifiersClassNames={{ selected: 'wedding-day-selected', today: 'wedding-day-today' }}
         />
       </div>
+      <div className="calendar-emblem" aria-hidden="true" />
       <div className="calendar-caption">
         <div className="count-grid">
           <div className="count-item">
@@ -68,7 +70,7 @@ export default function CalendarSection({
           className="count-copy"
           lines={[
             <>
-              무민, 소연의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
+              <span className="count-copy-names">무민, 소연</span>의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
             </>,
           ]}
           active={revealed}

@@ -273,7 +273,7 @@ h2,
 
 .hero-paper {
   width: 100%;
-  padding: 1rem 0.25rem 1.25rem;
+  padding: 1rem 1.875rem 1.25rem;
 }
 
 .hero-paper-head {
@@ -434,7 +434,9 @@ h2,
 
 .hero-frame {
   position: relative;
-  width: 100%;
+  width: auto;
+  margin-left: -1.875rem;
+  margin-right: -1.875rem;
   aspect-ratio: 4 / 5.9;
   overflow: hidden;
   border-radius: 0;
@@ -601,8 +603,9 @@ h2 {
 }
 
 .message .accent-initial {
-  color: #6d8066;
-  font-weight: 600;
+  color: #46614f;
+  font-weight: 700;
+  text-shadow: 0 0 0.01875rem rgba(70, 97, 79, 0.22);
 }
 
 .message h2,
@@ -621,18 +624,23 @@ h2 {
 
 .message-emblem {
   margin: 2.125rem auto var(--space-2);
-  width: 4.5rem;
-  color: #8f9d86;
-  line-height: 0;
-  display: flex;
-  justify-content: center;
+  width: 66%;
+  height: 0.0625rem;
+  background: linear-gradient(90deg, transparent, rgba(92, 111, 89, 0.24), transparent);
 }
 
-.message-emblem svg {
-  display: block;
+.calendar-emblem {
+  margin: 1rem auto 1.25rem;
+  width: 66%;
+  height: 0.0625rem;
+  background: linear-gradient(90deg, transparent, rgba(92, 111, 89, 0.24), transparent);
+}
+
+.transport-emblem {
+  margin: 0 auto 0.875rem;
   width: 100%;
-  height: auto;
-  margin: 0 auto;
+  height: 0.0625rem;
+  background: rgba(92, 111, 89, 0.24);
 }
 
 .people h2,
@@ -717,6 +725,9 @@ h2 {
 
 .family-inline-copy strong {
   margin: 0;
+  color: #4f6858;
+  font-weight: 700;
+  text-shadow: 0 0 0.01875rem rgba(79, 104, 88, 0.28);
 }
 
 .phone-icon-link {
@@ -847,13 +858,20 @@ h2 {
 
 .count-copy {
   margin: var(--space-4) 0 0;
-  font-size: calc(var(--body-size) + 0.14rem);
-  font-weight: 500;
+  font-size: var(--body-size);
+  font-weight: 400;
   color: var(--body-text);
+  font-family: var(--font-ko);
+  line-height: 1.8;
 }
 
 .count-copy span {
   color: var(--body-text);
+}
+
+.count-copy .count-copy-names {
+  color: var(--body-text);
+  font-weight: inherit;
 }
 
 .count-copy strong {
@@ -1837,11 +1855,6 @@ h2 {
 
 .transport-item {
   padding: 1.125rem 0.25rem 1rem;
-  border-top: 0.0625rem solid rgba(61, 47, 39, 0.15);
-}
-
-.transport-item:last-child {
-  border-bottom: 0.0625rem solid rgba(61, 47, 39, 0.15);
 }
 
 .transport-item h3 {

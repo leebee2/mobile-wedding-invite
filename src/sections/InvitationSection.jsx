@@ -26,23 +26,7 @@ export default function InvitationSection({ activeSection, revealed, sectionMoti
         active={revealed}
       />
       <div className="people">
-        <div className="message-emblem" aria-hidden="true">
-          <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" fill="none">
-            <path
-              d="M 230 300 C 150 300, 150 200, 200 200 C 230 200, 250 250, 400 350 C 550 250, 570 200, 600 200 C 650 200, 650 300, 570 300 M 400 350 C 350 250, 280 150, 400 100 C 520 150, 450 250, 400 350"
-              stroke="currentColor"
-              strokeWidth="8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M 230 300 C 200 300, 180 330, 200 350 C 220 370, 250 350, 240 330 M 570 300 C 600 300, 620 330, 600 350 C 580 370, 550 350, 560 330"
-              stroke="currentColor"
-              strokeWidth="8"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+        <div className="message-emblem" aria-hidden="true" />
         <div className="rows">
           <div className="row family-row">
             <div className="family-inline-row">
