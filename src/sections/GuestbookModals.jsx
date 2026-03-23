@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 function renderModal(content) {
@@ -88,6 +89,24 @@ export function GuestbookViewerModal({
   openDeleteModal,
   formatGuestbookDate,
 }) {
+  useEffect(() => {
+    if (!open || typeof document === 'undefined') {
+      return undefined;
+    }
+
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+    const previousTouchAction = body.style.touchAction;
+
+    body.style.overflow = 'hidden';
+    body.style.touchAction = 'none';
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.touchAction = previousTouchAction;
+    };
+  }, [open]);
+
   if (!open) {
     return null;
   }
@@ -108,10 +127,7 @@ export function GuestbookViewerModal({
                 <button
                   type="button"
                   className="guestbook-delete-btn"
-                  onClick={() => {
-                    onClose();
-                    openDeleteModal(item.id);
-                  }}
+                  onClick={() => openDeleteModal(item.id)}
                   aria-label="방명록 삭제"
                 >
                   ×

@@ -19,13 +19,15 @@ export default function InformationSection({ activeSection, revealed, sectionMot
         viewport={{ once: true, amount: 0.18 }}
         transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       >
-        <img
-          className="information-image"
-          src={`${BASE_URL}photos/image.png`}
-          alt="월드컵컨벤션 연회장"
-          loading="lazy"
-          decoding="async"
-        />
+        <div className="information-image-frame">
+          <img
+            className="information-image"
+            src={`${BASE_URL}photos/image.png`}
+            alt="월드컵컨벤션 연회장"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
         <RevealText
           as="p"
           className="information-copy"
