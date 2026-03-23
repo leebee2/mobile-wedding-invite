@@ -13,7 +13,7 @@ export default function GallerySection({
   const [galleryExpanded, setGalleryExpanded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const lightboxControllerRef = useRef(null);
+  const navigationLockRef = useRef(false);
 
   useEffect(() => {
     document.body.classList.toggle('lightbox-open', lightboxOpen);
@@ -34,6 +34,22 @@ export default function GallerySection({
       image.src = galleryImages[index].full;
     });
   }, [galleryImages, lightboxIndex, lightboxOpen]);
+
+  const moveLightbox = (direction) => {
+    if (navigationLockRef.current || !galleryImages.length) {
+      return;
+    }
+
+    navigationLockRef.current = true;
+    setLightboxIndex((prev) => {
+      const total = galleryImages.length;
+      return (prev + direction + total) % total;
+    });
+
+    window.setTimeout(() => {
+      navigationLockRef.current = false;
+    }, 140);
+  };
 
   return (
     <>
@@ -88,29 +104,28 @@ export default function GallerySection({
         index={lightboxIndex}
         slides={galleryImages.map((image) => ({ src: image.full }))}
         on={{ view: ({ index }) => setLightboxIndex(index) }}
-        carousel={{ padding: 0, spacing: 0, preload: 2, imageFit: 'contain' }}
+        carousel={{ padding: 0, spacing: 0, preload: 1, imageFit: 'contain' }}
         animation={{
           fade: 0,
-          swipe: 120,
-          navigation: 120,
+          swipe: 80,
+          navigation: 90,
           easing: {
             fade: 'linear',
-            swipe: 'ease-out',
-            navigation: 'ease-out',
+            swipe: 'linear',
+            navigation: 'linear',
           },
         }}
-        controller={{ ref: lightboxControllerRef }}
         render={{
           buttonPrev: () => null,
           buttonNext: () => null,
           controls: () => (
             <div className="lightbox-mobile-nav" aria-hidden={!lightboxOpen}>
-              <button type="button" className="lightbox-mobile-arrow" onClick={() => lightboxControllerRef.current?.prev()}>
+              <button type="button" className="lightbox-mobile-arrow" onClick={() => moveLightbox(-1)}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M15 18l-6-6 6-6" />
                 </svg>
               </button>
-              <button type="button" className="lightbox-mobile-arrow" onClick={() => lightboxControllerRef.current?.next()}>
+              <button type="button" className="lightbox-mobile-arrow" onClick={() => moveLightbox(1)}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M9 6l6 6-6 6" />
                 </svg>

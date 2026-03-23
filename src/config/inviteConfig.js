@@ -9,9 +9,12 @@ export const bgmSrc = `${BASE_URL}photos/krasnoshchok-wedding-romantic-love-musi
 export const galleryFiles = [
   { full: 'YG_00081.jpg', thumb: 'YG_00081.jpg' },
   { full: 'YG_00164.jpg', thumb: 'YG_00164.jpg' },
+  { full: 'YG_00217.jpg', thumb: 'YG_00217.jpg' },
   { full: 'YG_00277.jpg', thumb: 'YG_00277.jpg' },
   { full: '002.jpeg', thumb: '002.jpg' },
+  { full: 'YG_00316.jpg', thumb: 'YG_00316.jpg' },
   { full: 'YG_00337.jpg', thumb: 'YG_00337.jpg' },
+  { full: 'YG_00407.jpg', thumb: 'YG_00407.jpg' },
   { full: 'YG_00506.jpg', thumb: 'YG_00506.jpg' },
   { full: 'YG_00566.jpg', thumb: 'YG_00566.jpg' },
   { full: 'YG_00671.jpg', thumb: 'YG_00671.jpg' },
