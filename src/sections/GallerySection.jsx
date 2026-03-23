@@ -23,14 +23,20 @@ export default function GallerySection({
   return (
     <>
       <motion.section
-        className={`section section-flow gallery ${activeSection === 4 ? 'is-current' : 'is-dimmed'}`}
-        data-section-index="4"
+        className={`section section-flow gallery ${activeSection === 5 ? 'is-current' : 'is-dimmed'}`}
+        data-section-index="5"
         custom={5}
         {...sectionMotion}
       >
         <RevealText as="p" className="map-eyebrow" lines={['Gallery']} />
         <RevealText as="h2" className="section-title" lines={['갤러리']} />
-        <div className={`grid gallery-grid ${galleryExpanded ? 'is-expanded' : ''}`}>
+        <motion.div
+          className={`grid gallery-grid ${galleryExpanded ? 'is-expanded' : ''}`}
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.18 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
           {(galleryExpanded ? galleryImages : galleryImages.slice(0, galleryPreviewCount)).map((image, idx) => (
             <button
               key={image.full}
@@ -51,7 +57,7 @@ export default function GallerySection({
               />
             </button>
           ))}
-        </div>
+        </motion.div>
         {galleryImages.length > galleryPreviewCount && (
           <button type="button" className="gallery-more-btn" onClick={() => setGalleryExpanded((prev) => !prev)}>
             {galleryExpanded ? '접기' : '더보기'}

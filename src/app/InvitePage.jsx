@@ -6,6 +6,7 @@ import {
   GuestbookSection,
   HeartNoteSection,
   HeroSection,
+  InformationSection,
   IntroOverlay,
   InvitationSection,
   LocationSection,
@@ -217,6 +218,7 @@ function App() {
           setToastMessage={setToastMessage}
           kakaoAppKey={kakaoAppKey}
         />
+        <InformationSection activeSection={activeSection} revealed={Boolean(revealedSections[4])} sectionMotion={sectionMotion} />
         <GallerySection
           activeSection={activeSection}
           sectionMotion={sectionMotion}
@@ -225,14 +227,14 @@ function App() {
         />
         <HeartNoteSection
           activeSection={activeSection}
-          revealed={Boolean(revealedSections[5])}
+          revealed={Boolean(revealedSections[6])}
           sectionMotion={sectionMotion}
           transferGroups={transferGroups}
           setToastMessage={setToastMessage}
         />
         <GuestbookSection
           activeSection={activeSection}
-          revealed={Boolean(revealedSections[6])}
+          revealed={Boolean(revealedSections[7])}
           sectionMotion={sectionMotion}
           supabase={supabase}
           setToastMessage={setToastMessage}

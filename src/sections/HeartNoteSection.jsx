@@ -28,8 +28,8 @@ export default function HeartNoteSection({
 
   return (
     <motion.section
-      className={`section section-screen heart-note ${activeSection === 5 ? 'is-current' : 'is-dimmed'}`}
-      data-section-index="5"
+      className={`section section-screen heart-note ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
+      data-section-index="6"
       custom={6}
       {...sectionMotion}
     >

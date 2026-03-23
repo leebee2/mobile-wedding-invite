@@ -41,8 +41,8 @@ export default function GuestbookSection({
   return (
     <>
       <motion.section
-        className={`section section-flow guestbook ${activeSection === 6 ? 'is-current' : 'is-dimmed'}`}
-        data-section-index="6"
+        className={`section section-flow guestbook ${activeSection === 7 ? 'is-current' : 'is-dimmed'}`}
+        data-section-index="7"
         custom={7}
         {...sectionMotion}
       >

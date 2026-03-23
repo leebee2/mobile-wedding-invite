@@ -3,6 +3,7 @@ export { default as HeroSection } from './HeroSection';
 export { default as InvitationSection } from './InvitationSection';
 export { default as CalendarSection } from './CalendarSection';
 export { default as LocationSection } from './LocationSection';
+export { default as InformationSection } from './InformationSection';
 export { default as GallerySection } from './GallerySection';
 export { default as HeartNoteSection } from './HeartNoteSection';
 export { default as GuestbookSection } from './GuestbookSection';
