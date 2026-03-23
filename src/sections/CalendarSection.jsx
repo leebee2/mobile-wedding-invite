@@ -19,8 +19,8 @@ export default function CalendarSection({
     >
       <RevealText as="p" className="map-eyebrow" lines={['Wedding Day']} active={revealed} />
       <RevealText
-        as="p"
-        className="calendar-subtitle"
+        as="h2"
+        className="section-title calendar-title"
         lines={['2026. 06. 20. 토요일 오전 11시']}
         baseDelay={0.06}
         active={revealed}
@@ -46,20 +46,20 @@ export default function CalendarSection({
       <div className="calendar-caption">
         <div className="count-grid">
           <div className="count-item">
-            <span>DAYS</span>
-            <strong>{countdown.days}</strong>
+            <RevealText as="span" className="count-item-label" lines={['DAYS']} baseDelay={0.1} active={revealed} />
+            <RevealText as="strong" className="count-item-value" lines={[String(countdown.days)]} baseDelay={0.14} active={revealed} />
           </div>
           <div className="count-item">
-            <span>HOUR</span>
-            <strong>{countdown.hours}</strong>
+            <RevealText as="span" className="count-item-label" lines={['HOUR']} baseDelay={0.18} active={revealed} />
+            <RevealText as="strong" className="count-item-value" lines={[String(countdown.hours)]} baseDelay={0.22} active={revealed} />
           </div>
           <div className="count-item">
-            <span>MIN</span>
-            <strong>{countdown.minutes}</strong>
+            <RevealText as="span" className="count-item-label" lines={['MIN']} baseDelay={0.26} active={revealed} />
+            <RevealText as="strong" className="count-item-value" lines={[String(countdown.minutes)]} baseDelay={0.3} active={revealed} />
           </div>
           <div className="count-item">
-            <span>SEC</span>
-            <strong>{countdown.seconds}</strong>
+            <RevealText as="span" className="count-item-label" lines={['SEC']} baseDelay={0.34} active={revealed} />
+            <RevealText as="strong" className="count-item-value" lines={[String(countdown.seconds)]} baseDelay={0.38} active={revealed} />
           </div>
         </div>
         <RevealText

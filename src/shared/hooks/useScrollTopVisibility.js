@@ -4,8 +4,17 @@ export default function useScrollTopVisibility(offset = 520) {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const onScroll = () => {
-      setShowScrollTop(window.scrollY > offset);
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        setShowScrollTop(window.scrollY > offset);
+        ticking = false;
+      });
     };
 
     onScroll();

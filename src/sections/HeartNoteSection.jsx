@@ -33,8 +33,8 @@ export default function HeartNoteSection({
       custom={6}
       {...sectionMotion}
     >
-      <p className="map-eyebrow">With Heart</p>
-      <h2>마음 전하실 곳</h2>
+      <RevealText as="p" className="map-eyebrow" lines={['With Heart']} active={revealed} />
+      <RevealText as="h2" className="section-title" lines={['마음 전하실 곳']} active={revealed} />
       <RevealText
         as="p"
         lines={['참석이 어려우신 분들을 위해 기재했습니다.', '너그러운 마음으로 양해 부탁드립니다.']}

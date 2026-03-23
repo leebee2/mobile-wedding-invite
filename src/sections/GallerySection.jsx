@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-import { LightboxCounter } from '../shared/ui';
+import { LightboxCounter, RevealText } from '../shared/ui';
 
 export default function GallerySection({
   activeSection,
@@ -28,8 +28,8 @@ export default function GallerySection({
         custom={5}
         {...sectionMotion}
       >
-        <p className="map-eyebrow">Gallery</p>
-        <h2>갤러리</h2>
+        <RevealText as="p" className="map-eyebrow" lines={['Gallery']} />
+        <RevealText as="h2" className="section-title" lines={['갤러리']} />
         <div className={`grid gallery-grid ${galleryExpanded ? 'is-expanded' : ''}`}>
           {(galleryExpanded ? galleryImages : galleryImages.slice(0, galleryPreviewCount)).map((image, idx) => (
             <button

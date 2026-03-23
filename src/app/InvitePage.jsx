@@ -161,7 +161,6 @@ function App() {
     window.addEventListener('pointerdown', unlockOnInteraction);
     window.addEventListener('touchstart', unlockOnInteraction);
     window.addEventListener('keydown', unlockOnInteraction);
-    window.addEventListener('scroll', unlockOnInteraction, { passive: true });
     return () => {
       cancelled = true;
       window.clearInterval(retryTimer);
@@ -170,7 +169,6 @@ function App() {
       window.removeEventListener('pointerdown', unlockOnInteraction);
       window.removeEventListener('touchstart', unlockOnInteraction);
       window.removeEventListener('keydown', unlockOnInteraction);
-      window.removeEventListener('scroll', unlockOnInteraction);
     };
   }, []);
 

@@ -46,8 +46,8 @@ export default function GuestbookSection({
         custom={7}
         {...sectionMotion}
       >
-        <p className="map-eyebrow">Guestbook</p>
-        <h2>방명록</h2>
+        <RevealText as="p" className="map-eyebrow" lines={['Guestbook']} active={revealed} />
+        <RevealText as="h2" className="section-title" lines={['방명록']} active={revealed} />
         <RevealText
           as="p"
           className="guestbook-note"
