@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-import { LightboxCounter, RevealText } from '../shared/ui';
+import { ButtonReveal, LightboxCounter, RevealText } from '../shared/ui';
 
 export default function GallerySection({
   activeSection,
@@ -59,9 +59,11 @@ export default function GallerySection({
           ))}
         </motion.div>
         {galleryImages.length > galleryPreviewCount && (
-          <button type="button" className="gallery-more-btn" onClick={() => setGalleryExpanded((prev) => !prev)}>
-            {galleryExpanded ? '접기' : '더보기'}
-          </button>
+          <ButtonReveal delay={0.12}>
+            <button type="button" className="gallery-more-btn" onClick={() => setGalleryExpanded((prev) => !prev)}>
+              {galleryExpanded ? '접기' : '더보기'}
+            </button>
+          </ButtonReveal>
         )}
       </motion.section>
       <LightboxCounter open={lightboxOpen} index={lightboxIndex} total={galleryImages.length} />

@@ -18,10 +18,11 @@ export default function CalendarSection({
       {...sectionMotion}
     >
       <RevealText as="p" className="map-eyebrow" lines={['Wedding Day']} active={revealed} />
+      <RevealText as="h2" className="section-title calendar-section-title" lines={['예식 일시']} baseDelay={0.04} active={revealed} />
       <RevealText
-        as="h2"
-        className="section-title calendar-title"
-        lines={['2026. 06. 20.', '토요일 오전 11시']}
+        as="p"
+        className="calendar-title"
+        lines={['2026. 06. 20. 토요일 오전 11시']}
         baseDelay={0.06}
         active={revealed}
       />

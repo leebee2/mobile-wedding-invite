@@ -45,22 +45,21 @@ export default function InvitationSection({ activeSection, revealed, sectionMoti
         </div>
         <div className="rows">
           <div className="row family-row">
-            <div className="family-head">
-              <RevealText as="span" className="role" lines={['신랑']} baseDelay={0.18} active={revealed} />
-            </div>
-            <RevealText
-              as="p"
-              className="family-line"
-              lines={[
-                <>
-                  류세형 · 이명자 <span className="family-line-suffix">장남</span>
-                </>,
-              ]}
-              baseDelay={0.22}
-              active={revealed}
-            />
-            <div className="name-contact">
-              <RevealText as="strong" className="family-name" lines={['류무민']} baseDelay={0.26} active={revealed} />
+            <div className="family-inline-row">
+              <RevealText
+                as="p"
+                className="family-inline-copy"
+                lines={[
+                  <>
+                    <span className="family-inline-parents">
+                      류세형 · 이명자 <span className="family-line-suffix">장남</span>
+                    </span>{' '}
+                    <strong>류무민</strong>
+                  </>,
+                ]}
+                baseDelay={0.18}
+                active={revealed}
+              />
               <a className="phone-icon-link" href="tel:01080201271" aria-label="신랑에게 전화하기">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.78.65 2.62a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.46-1.22a2 2 0 0 1 2.11-.45c.84.31 1.72.53 2.62.65A2 2 0 0 1 22 16.92z" />
@@ -69,22 +68,21 @@ export default function InvitationSection({ activeSection, revealed, sectionMoti
             </div>
           </div>
           <div className="row family-row">
-            <div className="family-head">
-              <RevealText as="span" className="role" lines={['신부']} baseDelay={0.3} active={revealed} />
-            </div>
-            <RevealText
-              as="p"
-              className="family-line"
-              lines={[
-                <>
-                  이지홍 · 심미란 <span className="family-line-suffix">장녀</span>
-                </>,
-              ]}
-              baseDelay={0.34}
-              active={revealed}
-            />
-            <div className="name-contact">
-              <RevealText as="strong" className="family-name" lines={['이소연']} baseDelay={0.38} active={revealed} />
+            <div className="family-inline-row">
+              <RevealText
+                as="p"
+                className="family-inline-copy"
+                lines={[
+                  <>
+                    <span className="family-inline-parents">
+                      이지홍 · 심미란 <span className="family-line-suffix">장녀</span>
+                    </span>{' '}
+                    <strong>이소연</strong>
+                  </>,
+                ]}
+                baseDelay={0.3}
+                active={revealed}
+              />
               <a className="phone-icon-link" href="tel:01021704869" aria-label="신부에게 전화하기">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.78.65 2.62a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.46-1.22a2 2 0 0 1 2.11-.45c.84.31 1.72.53 2.62.65A2 2 0 0 1 22 16.92z" />

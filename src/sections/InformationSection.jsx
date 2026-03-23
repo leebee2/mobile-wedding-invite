@@ -11,8 +11,14 @@ export default function InformationSection({ activeSection, revealed, sectionMot
       {...sectionMotion}
     >
       <RevealText as="p" className="map-eyebrow" lines={['INFORMATION']} active={revealed} />
-      <RevealText as="h2" className="section-title" lines={['연회 & 식사 안내']} active={revealed} />
-      <div className="information-card">
+      <RevealText as="h2" className="section-title" lines={['예식정보 및 안내사항']} active={revealed} />
+      <motion.div
+        className="information-card"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.18 }}
+        transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+      >
         <img
           className="information-image"
           src={`${BASE_URL}photos/image.png`}
@@ -32,7 +38,7 @@ export default function InformationSection({ activeSection, revealed, sectionMot
           baseDelay={0.1}
           active={revealed}
         />
-      </div>
+      </motion.div>
     </motion.section>
   );
 }

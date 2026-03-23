@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { RevealText } from '../shared/ui';
+import { ButtonReveal, RevealText } from '../shared/ui';
+import { BASE_URL } from '../config';
 import { GuestbookCreateModal, GuestbookDeleteModal, GuestbookViewerModal } from './GuestbookModals';
 import { useGuestbook } from './hooks';
 
@@ -46,6 +47,21 @@ export default function GuestbookSection({
         custom={7}
         {...sectionMotion}
       >
+        <motion.div
+          className="guestbook-hero-card"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.18 }}
+          transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <img
+            className="guestbook-hero-image"
+            src={`${BASE_URL}photos/guestbook-intro.png`}
+            alt="방명록 인트로 사진"
+            loading="lazy"
+            decoding="async"
+          />
+        </motion.div>
         <RevealText as="p" className="map-eyebrow" lines={['Guestbook']} active={revealed} />
         <RevealText as="h2" className="section-title" lines={['방명록']} active={revealed} />
         <RevealText
@@ -83,13 +99,17 @@ export default function GuestbookSection({
           )}
         </div>
         {!guestbookLoading && guestbookItems.length > 3 && (
-          <button type="button" className="guestbook-more-btn" onClick={() => setGuestbookViewerOpen(true)}>
-            더보기
-          </button>
+          <ButtonReveal delay={0.08}>
+            <button type="button" className="guestbook-more-btn" onClick={() => setGuestbookViewerOpen(true)}>
+              더보기
+            </button>
+          </ButtonReveal>
         )}
-        <button type="button" className="guestbook-write-btn" onClick={openGuestbookModal}>
-          작성하기
-        </button>
+        <ButtonReveal delay={0.14}>
+          <button type="button" className="guestbook-write-btn" onClick={openGuestbookModal}>
+            작성하기
+          </button>
+        </ButtonReveal>
       </motion.section>
 
       <GuestbookCreateModal

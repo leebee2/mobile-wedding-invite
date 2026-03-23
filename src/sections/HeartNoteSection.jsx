@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { RevealText } from '../shared/ui';
+import { ButtonReveal, RevealText } from '../shared/ui';
 
 export default function HeartNoteSection({
   activeSection,
@@ -46,22 +46,24 @@ export default function HeartNoteSection({
           const isOpen = Boolean(openTransferMap[group.key]);
           return (
             <div key={group.key} className={`transfer-group ${isOpen ? 'is-open' : ''}`}>
-              <button
-                type="button"
-                className="transfer-trigger"
-                onClick={() =>
-                  setOpenTransferMap((prev) => ({
-                    ...prev,
-                    [group.key]: !prev[group.key],
-                  }))
-                }
-                aria-expanded={isOpen}
-              >
-                <span>{group.title}</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={isOpen ? 'M6 14l6-6 6 6' : 'M6 10l6 6 6-6'} />
-                </svg>
-              </button>
+              <ButtonReveal delay={group.key === 'groom' ? 0.08 : 0.14}>
+                <button
+                  type="button"
+                  className="transfer-trigger"
+                  onClick={() =>
+                    setOpenTransferMap((prev) => ({
+                      ...prev,
+                      [group.key]: !prev[group.key],
+                    }))
+                  }
+                  aria-expanded={isOpen}
+                >
+                  <span>{group.title}</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d={isOpen ? 'M6 14l6-6 6 6' : 'M6 10l6 6 6-6'} />
+                  </svg>
+                </button>
+              </ButtonReveal>
               {isOpen && (
                 <div className="transfer-content">
                   {group.accounts.map((account) => (
