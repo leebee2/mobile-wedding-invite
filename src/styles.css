@@ -41,7 +41,7 @@
   --title-size: 2.19rem;
   --body-size: 1.12rem;
   --poem-size: 1.5rem;
-  --family-line-size: 1rem;
+  --family-line-size: 0.9rem;
   --transport-title-size: 1rem;
   --meta-size: 0.82rem;
   --caption-size: 0.74rem;
@@ -75,6 +75,11 @@ body {
     radial-gradient(circle at 18% 4%, rgba(127, 145, 117, 0.06), transparent 28%),
     radial-gradient(circle at 84% 16%, rgba(210, 219, 196, 0.14), transparent 30%),
     var(--bg);
+}
+
+body.lightbox-open .scroll-top-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .guestbook-write-btn,
@@ -532,12 +537,13 @@ h2,
 }
 
 .hero-arch-names-line .reveal-line-inner {
-  font-size: clamp(1.02rem, 3.92vw, 1.36rem) !important;
+  font-size: 1.3rem !important;
   line-height: 1.16 !important;
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
 .hero-arch-date-line .reveal-line-inner {
-  font-size: clamp(0.76rem, 2.8vw, 0.98rem) !important;
+  font-size: 1.1rem !important;
   line-height: 1.16 !important;
 }
 
@@ -693,15 +699,20 @@ h2 {
 .family-line {
   margin: 6px 0 4px;
   color: var(--muted);
-  font-size: 1rem !important;
+  font-size: var(--family-line-size) !important;
   line-height: 1.4;
+}
+
+.family-line-suffix {
+  color: rgba(121, 117, 112, 0.7);
 }
 
 .family-row strong {
   display: block;
   margin-top: 4px;
-  font-size: calc(var(--body-size) + 0.12rem);
+  font-size: 1.6rem;
   letter-spacing: 0.01em;
+  font-family: 'Nanum Bujangnim', 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .name-contact {
@@ -1637,6 +1648,10 @@ h2 {
   pointer-events: none;
 }
 
+.lightbox-mobile-nav {
+  display: none;
+}
+
 .yarl__navigation_prev,
 .yarl__navigation_next {
   border: 0 !important;
@@ -1817,7 +1832,6 @@ h2 {
 .intro-copy p,
 .hero-arch-sub,
 .message p,
-.family-row strong,
 .row a,
 .family-row a,
 .map-venue,
@@ -1865,20 +1879,18 @@ h2 {
 
 @media (max-width: 768px) {
   .invite-page {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: none;
   }
 
   .section {
+    scroll-snap-align: none;
     scroll-snap-stop: normal;
   }
 
   .section.is-current,
   .section.is-dimmed {
+    opacity: 1;
     transform: none;
-  }
-
-  .section.is-dimmed {
-    opacity: 0.55;
   }
 }
 
@@ -1889,11 +1901,6 @@ h2 {
 
   .section + .section {
     margin-top: var(--section-gap-mobile);
-  }
-
-  .section.is-dimmed {
-    opacity: 0.3;
-    transform: none;
   }
 
   .hero {
@@ -1932,6 +1939,63 @@ h2 {
 
   .guestbook + .footer {
     margin-top: 7.5rem;
+  }
+
+  .lightbox-footer-counter {
+    left: 50%;
+    right: auto;
+    bottom: 10px;
+    transform: translateX(-50%);
+    min-width: 72px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.92rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .yarl__navigation_prev,
+  .yarl__navigation_next {
+    display: none !important;
+  }
+
+  .lightbox-mobile-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 10px;
+    z-index: 20001;
+    width: 170px;
+    margin-left: -85px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .lightbox-mobile-arrow {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+  }
+
+  .lightbox-mobile-arrow svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .typewriter {

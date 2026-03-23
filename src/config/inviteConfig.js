@@ -41,7 +41,7 @@ export const galleryFiles = [
 
 export const galleryImages = galleryFiles.map((file) => ({
   thumb: `${BASE_URL}photos/thumbs/${file.thumb}`,
-  full: `${BASE_URL}photos/${file.full}`,
+  full: `${BASE_URL}photos/display/${file.full}`,
 }));
 
 export const galleryPreviewCount = 6;

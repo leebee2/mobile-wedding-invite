@@ -48,7 +48,9 @@ export default function InvitationSection({ activeSection, revealed, sectionMoti
             <div className="family-head">
               <span className="role">신랑</span>
             </div>
-            <p className="family-line">류세형 · 이명자의 장남</p>
+            <p className="family-line">
+              류세형 · 이명자 <span className="family-line-suffix">장남</span>
+            </p>
             <div className="name-contact">
               <strong>류무민</strong>
               <a className="phone-icon-link" href="tel:01080201271" aria-label="신랑에게 전화하기">
@@ -62,7 +64,9 @@ export default function InvitationSection({ activeSection, revealed, sectionMoti
             <div className="family-head">
               <span className="role">신부</span>
             </div>
-            <p className="family-line">이지홍 · 심미란의 장녀</p>
+            <p className="family-line">
+              이지홍 · 심미란 <span className="family-line-suffix">장녀</span>
+            </p>
             <div className="name-contact">
               <strong>이소연</strong>
               <a className="phone-icon-link" href="tel:01021704869" aria-label="신부에게 전화하기">
