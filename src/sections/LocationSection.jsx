@@ -222,9 +222,9 @@ export default function LocationSection({
             <h3>버스</h3>
           </motion.div>
           <RevealText as="p" className="point" lines={['월드컵경기장 서측 문화비축기지 정류장 하차 도보 3분']} baseDelay={0.05} active={transportGuideVisible} />
-          <RevealText as="p" lines={['간선: 571, 710, 760']} baseDelay={0.1} active={transportGuideVisible} />
-          <RevealText as="p" lines={['지선: 7019, 7715, 8777']} baseDelay={0.15} active={transportGuideVisible} />
-          <RevealText as="p" lines={['광역: 9711']} baseDelay={0.2} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<><strong>간선:</strong> 571, 710, 760</>]} baseDelay={0.1} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<><strong>지선:</strong> 7019, 7715, 8777</>]} baseDelay={0.15} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<><strong>광역:</strong> 9711</>]} baseDelay={0.2} active={transportGuideVisible} />
         </div>
         <div className="transport-item">
           <div className="transport-emblem" aria-hidden="true" />
@@ -246,7 +246,7 @@ export default function LocationSection({
           </motion.div>
           <RevealText as="p" className="point" lines={['6호선 월드컵경기장역 2번 출구 도보 3분 (200m)']} baseDelay={0.24} active={transportGuideVisible} />
           <RevealText as="p" lines={['월드컵경기장역 2번 출구에서 경기장 서측(W) 방향']} baseDelay={0.29} active={transportGuideVisible} />
-          <RevealText as="p" lines={['환승: 2호선 합정, 3호선 불광·약수, 4호선 삼각지, 5호선 공덕']} baseDelay={0.34} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<><strong>환승:</strong> 2호선 합정, 3호선 불광·약수, 4호선 삼각지, 5호선 공덕</>]} baseDelay={0.34} active={transportGuideVisible} />
         </div>
         <div className="transport-item">
           <div className="transport-emblem" aria-hidden="true" />
@@ -265,8 +265,8 @@ export default function LocationSection({
             <h3>자동차</h3>
           </motion.div>
           <RevealText as="p" className="point" lines={['월드컵경기장 서문 진입 후 서측 1,2 주차장 이용']} baseDelay={0.38} active={transportGuideVisible} />
-          <RevealText as="p" lines={['주차 접수대 등록 후 출차 (90분 무료)']} baseDelay={0.43} active={transportGuideVisible} />
-          <RevealText as="p" lines={['외부 주차 2시간 30분 무료 · 발렛파킹 무료']} baseDelay={0.48} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<>주차 접수대 등록 후 출차 (<strong>90분 무료</strong>)</>]} baseDelay={0.43} active={transportGuideVisible} />
+          <RevealText as="p" lines={[<>외부 주차 <strong>2시간 30분 무료</strong> · <strong>발렛파킹 무료</strong></>]} baseDelay={0.48} active={transportGuideVisible} />
         </div>
       </div>
     </motion.section>

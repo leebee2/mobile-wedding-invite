@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
 
+const GUESTBOOK_SUBMIT_INTERVAL_MS = 30 * 1000;
+const GUESTBOOK_LAST_SUBMIT_KEY = 'guestbook-last-submit-at';
+const GUESTBOOK_NAME_MAX = 12;
+const GUESTBOOK_PASSWORD_MIN = 4;
+const GUESTBOOK_PASSWORD_MAX = 12;
+const GUESTBOOK_MESSAGE_MAX = 200;
+
 function formatGuestbookDate(value) {
   const date = new Date(value);
   const yyyy = date.getFullYear();
@@ -14,6 +21,7 @@ export default function useGuestbook({ supabase, setToastMessage }) {
   const [guestbookName, setGuestbookName] = useState('');
   const [guestbookPassword, setGuestbookPassword] = useState('');
   const [guestbookMessage, setGuestbookMessage] = useState('');
+  const [guestbookWebsite, setGuestbookWebsite] = useState('');
   const [guestbookItems, setGuestbookItems] = useState([]);
   const [guestbookLoading, setGuestbookLoading] = useState(true);
   const [guestbookSubmitting, setGuestbookSubmitting] = useState(false);
@@ -55,11 +63,44 @@ export default function useGuestbook({ supabase, setToastMessage }) {
     const name = guestbookName.trim();
     const password = guestbookPassword.trim();
     const message = guestbookMessage.trim();
+    const website = guestbookWebsite.trim();
 
     if (!name || !password || !message) {
       setToastMessage('이름, 번호, 메시지를 입력해주세요.');
       window.setTimeout(() => setToastMessage(''), 1800);
       return false;
+    }
+
+    if (website) {
+      setGuestbookSubmitting(false);
+      return false;
+    }
+
+    if (name.length > GUESTBOOK_NAME_MAX) {
+      setToastMessage(`이름은 ${GUESTBOOK_NAME_MAX}자 이하로 입력해 주세요.`);
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return false;
+    }
+
+    if (password.length < GUESTBOOK_PASSWORD_MIN || password.length > GUESTBOOK_PASSWORD_MAX) {
+      setToastMessage(`비밀번호는 ${GUESTBOOK_PASSWORD_MIN}~${GUESTBOOK_PASSWORD_MAX}자로 입력해 주세요.`);
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return false;
+    }
+
+    if (message.length > GUESTBOOK_MESSAGE_MAX) {
+      setToastMessage(`메시지는 ${GUESTBOOK_MESSAGE_MAX}자 이내로 작성해 주세요.`);
+      window.setTimeout(() => setToastMessage(''), 1800);
+      return false;
+    }
+
+    if (typeof window !== 'undefined') {
+      const lastSubmittedAt = Number(window.localStorage.getItem(GUESTBOOK_LAST_SUBMIT_KEY) || 0);
+      if (lastSubmittedAt && Date.now() - lastSubmittedAt < GUESTBOOK_SUBMIT_INTERVAL_MS) {
+        setToastMessage('잠시 후 다시 작성해 주세요.');
+        window.setTimeout(() => setToastMessage(''), 1800);
+        return false;
+      }
     }
 
     if (!supabase) {
@@ -87,6 +128,10 @@ export default function useGuestbook({ supabase, setToastMessage }) {
       setGuestbookName('');
       setGuestbookPassword('');
       setGuestbookMessage('');
+      setGuestbookWebsite('');
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(GUESTBOOK_LAST_SUBMIT_KEY, String(Date.now()));
+      }
       setToastMessage('방명록이 등록되었어요. 감사합니다.');
       window.setTimeout(() => setToastMessage(''), 1800);
       setGuestbookSubmitting(false);
@@ -148,11 +193,15 @@ export default function useGuestbook({ supabase, setToastMessage }) {
     setGuestbookName('');
     setGuestbookPassword('');
     setGuestbookMessage('');
+    setGuestbookWebsite('');
     setGuestbookModalOpen(true);
   };
 
   const canSubmitGuestbook =
-    guestbookName.trim().length > 0 && guestbookPassword.trim().length > 0 && guestbookMessage.trim().length > 0;
+    guestbookName.trim().length > 0 &&
+    guestbookPassword.trim().length > 0 &&
+    guestbookMessage.trim().length > 0 &&
+    guestbookWebsite.trim().length === 0;
   const canSubmitDelete = deletePassword.trim().length > 0;
 
   return {
@@ -162,6 +211,8 @@ export default function useGuestbook({ supabase, setToastMessage }) {
     setGuestbookPassword,
     guestbookMessage,
     setGuestbookMessage,
+    guestbookWebsite,
+    setGuestbookWebsite,
     guestbookItems,
     guestbookLoading,
     guestbookSubmitting,

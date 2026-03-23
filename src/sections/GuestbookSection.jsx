@@ -18,6 +18,8 @@ export default function GuestbookSection({
     setGuestbookPassword,
     guestbookMessage,
     setGuestbookMessage,
+    guestbookWebsite,
+    setGuestbookWebsite,
     guestbookItems,
     guestbookLoading,
     guestbookSubmitting,
@@ -127,6 +129,8 @@ export default function GuestbookSection({
         setGuestbookPassword={setGuestbookPassword}
         guestbookMessage={guestbookMessage}
         setGuestbookMessage={setGuestbookMessage}
+        guestbookWebsite={guestbookWebsite}
+        setGuestbookWebsite={setGuestbookWebsite}
         guestbookSubmitting={guestbookSubmitting}
         canSubmitGuestbook={canSubmitGuestbook}
       />

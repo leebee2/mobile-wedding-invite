@@ -18,6 +18,8 @@ export function GuestbookCreateModal({
   setGuestbookPassword,
   guestbookMessage,
   setGuestbookMessage,
+  guestbookWebsite,
+  setGuestbookWebsite,
   guestbookSubmitting,
   canSubmitGuestbook,
 }) {
@@ -36,6 +38,16 @@ export function GuestbookCreateModal({
         </div>
         <p className="guestbook-modal-subtitle">저희 둘의 결혼을 함께 축하해 주세요</p>
         <form className="guestbook-modal-form" onSubmit={onSubmit}>
+          <label className="guestbook-honeypot" aria-hidden="true">
+            <span>웹사이트</span>
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={guestbookWebsite}
+              onChange={(e) => setGuestbookWebsite(e.target.value)}
+            />
+          </label>
           <label>
             <span className="guestbook-sr-only">
               작성자 성함 <span>*</span>
@@ -45,7 +57,7 @@ export function GuestbookCreateModal({
               value={guestbookName}
               onChange={(e) => setGuestbookName(e.target.value)}
               placeholder="성함을 남겨주세요"
-              maxLength={20}
+              maxLength={12}
             />
           </label>
           <label>
@@ -57,7 +69,7 @@ export function GuestbookCreateModal({
               value={guestbookPassword}
               onChange={(e) => setGuestbookPassword(e.target.value)}
               placeholder="비밀번호를 입력해 주세요"
-              maxLength={20}
+              maxLength={12}
             />
           </label>
           <label>

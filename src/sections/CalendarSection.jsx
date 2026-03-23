@@ -70,7 +70,7 @@ export default function CalendarSection({
           className="count-copy"
           lines={[
             <>
-              <span className="count-copy-names">무민, 소연</span>의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
+              <span className="count-copy-names">무민 <span className="count-copy-heart">♥</span> 소연</span>의 결혼식이 <strong>{countdown.days + 1}일</strong> 남았습니다.
             </>,
           ]}
           active={revealed}
