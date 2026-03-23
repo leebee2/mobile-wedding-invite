@@ -20,6 +20,21 @@ export default function GallerySection({
     return () => document.body.classList.remove('lightbox-open');
   }, [lightboxOpen]);
 
+  useEffect(() => {
+    if (!lightboxOpen || !galleryImages.length) {
+      return;
+    }
+
+    const total = galleryImages.length;
+    const preloadIndexes = [lightboxIndex, (lightboxIndex - 1 + total) % total, (lightboxIndex + 1) % total];
+
+    preloadIndexes.forEach((index) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = galleryImages[index].full;
+    });
+  }, [galleryImages, lightboxIndex, lightboxOpen]);
+
   return (
     <>
       <motion.section
@@ -73,13 +88,13 @@ export default function GallerySection({
         index={lightboxIndex}
         slides={galleryImages.map((image) => ({ src: image.full }))}
         on={{ view: ({ index }) => setLightboxIndex(index) }}
-        carousel={{ padding: 0, spacing: 0, preload: 1, imageFit: 'contain' }}
+        carousel={{ padding: 0, spacing: 0, preload: 2, imageFit: 'contain' }}
         animation={{
-          fade: 120,
-          swipe: 180,
-          navigation: 180,
+          fade: 0,
+          swipe: 120,
+          navigation: 120,
           easing: {
-            fade: 'ease-out',
+            fade: 'linear',
             swipe: 'ease-out',
             navigation: 'ease-out',
           },
