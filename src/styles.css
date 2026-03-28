@@ -1220,6 +1220,7 @@ h2 {
   padding: 1.25rem 1rem 1.875rem;
   display: grid;
   grid-template-rows: auto 1fr;
+  min-height: 0;
 }
 
 .guestbook-viewer-head {
@@ -1260,20 +1261,21 @@ h2 {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 1.125rem;
   padding: 1.375rem 0.25rem 0;
+  min-height: 0;
 }
 
 .guestbook-viewer-list .guestbook-item {
   width: 100%;
-  height: fit-content;
-  min-height: 0;
+  height: auto;
   align-self: stretch;
   margin: 0;
   padding: 0.75rem 0.875rem 0.875rem;
   display: block;
   border-radius: 0.875rem;
+  overflow: visible;
 }
 
 .guestbook-viewer-list .guestbook-item-top {
@@ -1649,7 +1651,7 @@ h2 {
   width: 100%;
   text-align: center;
   padding: 0.6875rem 0.5rem;
-  font-size: 0.94rem;
+  font-size: 0.8rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
